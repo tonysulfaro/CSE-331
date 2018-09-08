@@ -117,7 +117,9 @@ class LinkedList:
         Gets the first value of the list
         :return: value of the list head
         """
-        return self.head.value
+        if self.head is not None:
+            return self.head.value
+        return None
 
 
     def back_value(self):
@@ -125,7 +127,9 @@ class LinkedList:
         Gets the last value of the list
         :return: value of the list tail
         """
-        return self.tail.value
+        if self.tail is not None:
+            return self.tail.value
+        return None
 
 
     def count(self, val):
@@ -222,16 +226,25 @@ class LinkedList:
         """
 
         if self.head is not None:
-            temp_node = self.head
-            while temp_node.next_node.next_node:
-                temp_node = temp_node.next_node
 
-            last = temp_node.next_node
-            self.tail = temp_node
-            self.tail.next_node = None
+            current_node = self.head
+            prev_node = None
 
-            self.size -= 1
-            return last.value
+            while current_node.next_node is not None:
+                prev_node = current_node
+                current_node = current_node.next_node
+
+            if prev_node is None: # popping list of one element
+                self.head = None
+                self.tail = None
+                self.size -= 1
+                return current_node.value
+            else:
+                prev_node.next_node = None
+                self.tail = prev_node
+                self.size -= 1
+                return current_node.value
+
         else:
             return None
 
@@ -251,12 +264,13 @@ def main():
 
     linker = LinkedList()
 
-    linker.push_front(3)
-    linker.push_front(4)
-    linker.push_front(5)
-    linker.push_back(99)
-    linker.push_back(109)
-    #print(linker.size)
+    linker.push_back(1)
+    linker.push_back(2)
+    linker.push_back(3)
+    linker.push_back(4)
+    linker.push_back(5)
+
+    print('size: ',linker.size)
 
     print('Head: ', linker.head)
     print('Tail: ', linker.tail)
@@ -268,7 +282,8 @@ def main():
         temp_self = temp_self.next_node
 
     print('misc methods:')
-    print(linker.pop_front())
+    print(linker.front_value())
+    print(linker.back_value())
     print(linker.pop_back())
 
     print('List Values:')
@@ -276,6 +291,11 @@ def main():
     while temp_self is not None:
         print(temp_self.value)
         temp_self = temp_self.next_node
+
+    print('size: ',linker.size)
+
+    print('Head: ', linker.head)
+    print('Tail: ', linker.tail)
 
 
 if __name__ == "__main__":
