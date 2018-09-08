@@ -125,7 +125,7 @@ class LinkedList:
         Gets the last value of the list
         :return: value of the list tail
         """
-        return self.tail.val
+        return self.tail.value
 
 
     def count(self, val):
@@ -141,7 +141,7 @@ class LinkedList:
             return 0
 
         while temp_self is not None:
-            if temp_self == val:
+            if temp_self.value == val:
                 count += 1
             temp_self = temp_self.next_node
         return count
@@ -155,7 +155,7 @@ class LinkedList:
         """
         temp_self = self.head
         while temp_self is not None:
-            if temp_self == val:
+            if temp_self.value == val:
                 return True
             temp_self = temp_self.next_node
         return False
@@ -237,7 +237,7 @@ class LinkedList:
 
 def main():
 
-    linker = LinkedList()
+    '''linker = LinkedList()
 
     #linker.push_front(3)
     #linker.push_front(4)
@@ -253,7 +253,30 @@ def main():
     temp_self = linker.head
     while temp_self is not None:
         print(temp_self.value)
-        temp_self = temp_self.next_node
+        temp_self = temp_self.next_node'''
+
+    linkl = LinkedList()
+
+    # Add nodes
+    linkl.push_back(47)
+    linkl.push_front(39)
+    linkl.push_back(21)
+    linkl.push_front(58)
+    linkl.push_back(32)
+    linkl.push_front(94)
+    linkl.push_back(16)
+    linkl.push_front(77)
+    linkl.push_back(56)
+    linkl.push_front(21)
+    linkl.push_back(4)
+    linkl.push_front(79)
+
+    # Print results
+    print("OUTPUT")
+    print("Linked List: ", linkl)
+    print("Count of 21: ", linkl.count(21))
+    print("Count of 94: ", linkl.count(94))
+    print("Count of 43: ", linkl.count(43))
         
 
 if __name__ == "__main__":
