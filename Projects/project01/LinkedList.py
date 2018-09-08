@@ -101,8 +101,8 @@ class LinkedList:
         Gets the number of nodes of the linked list
         :return: size of list
         """
-
         return self.size
+
 
     def is_empty(self):
         """
@@ -111,19 +111,22 @@ class LinkedList:
         """
         return self.size == 0
 
+
     def front_value(self):
         """
         Gets the first value of the list
         :return: value of the list head
         """
-        return self.head
+        return self.head.value
+
 
     def back_value(self):
         """
         Gets the last value of the list
         :return: value of the list tail
         """
-        return self.tail
+        return self.tail.val
+
 
     def count(self, val):
         """
@@ -142,6 +145,7 @@ class LinkedList:
                 count += 1
             temp_self = temp_self.next_node
         return count
+
 
     def find(self, val):
         """
@@ -164,9 +168,14 @@ class LinkedList:
         :param val: value to add to list
         :return: no return
         """
-        new_node = Node(val, self.head)
-        self.head = new_node
-        self.size += 1
+        if self.size == 0:
+            new_node = Node(val, self.head)
+            self.head = new_node
+            self.tail = new_node
+            self.size += 1
+        else:
+            self.head = Node(val, self.head)
+            self.size += 1
 
 
     def push_back(self, val):
@@ -175,14 +184,24 @@ class LinkedList:
         :param val: value to add to list
         :return: no return
         """
-        new_node = Node(val)
-
         if self.size == 0:
+            new_node = Node(val)
             self.head = new_node
+            self.tail = new_node
             self.size += 1
         else:
+            new_node = Node(val)
             self.tail.next_node = new_node
+            self.tail = new_node
             self.size += 1
+
+        '''if self.head is None:
+            self.head = Node(val, self.head)
+            return
+        temp_node = self.head
+        while(temp_node.next_node):
+            temp_node = temp_node.next_node
+        temp_node.next_node = Node(val)'''
 
 
     def pop_front(self):
@@ -198,6 +217,7 @@ class LinkedList:
         self.size -= 1
         return head.value
 
+
     def pop_back(self):
         """
         Removes a node from the back of the list
@@ -207,9 +227,34 @@ class LinkedList:
         self.size -= 1  
         return tail.value
 
+
     def reverse_list(self):
         """
         Reverses the values of the given linked list
         :return: no return
         """
         pass
+
+def main():
+
+    linker = LinkedList()
+
+    #linker.push_front(3)
+    #linker.push_front(4)
+    #linker.push_front(5)
+    linker.push_back(99)
+    linker.push_back(109)
+    #print(linker.size)
+
+    print('Head: ', linker.head)
+    print('Tail: ', linker.tail)
+
+    print('List Values:')
+    temp_self = linker.head
+    while temp_self is not None:
+        print(temp_self.value)
+        temp_self = temp_self.next_node
+        
+
+if __name__ == "__main__":
+    main()
