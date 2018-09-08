@@ -1,7 +1,7 @@
 ########################################
 # PROJECT 1 - Linked List
 # Author: Tony Sulfaro
-# PID: 
+# PID:
 ########################################
 
 
@@ -195,27 +195,24 @@ class LinkedList:
             self.tail = new_node
             self.size += 1
 
-        '''if self.head is None:
-            self.head = Node(val, self.head)
-            return
-        temp_node = self.head
-        while(temp_node.next_node):
-            temp_node = temp_node.next_node
-        temp_node.next_node = Node(val)'''
-
 
     def pop_front(self):
         """
         Removes a node from the front of the list
         :return: the value of the removed node
         """
+
         head = self.head
+        if head is not None:
+            next_node = self.head.next_node
 
-        if head != None:
+            if head is not None:
+                self.head = next_node
+                self.size -= 1
+
+            return head.value
+        else:
             return None
-
-        self.size -= 1
-        return head.value
 
 
     def pop_back(self):
@@ -223,9 +220,20 @@ class LinkedList:
         Removes a node from the back of the list
         :return: the value of the removed node
         """
-        tail = self.tail
-        self.size -= 1  
-        return tail.value
+
+        if self.head is not None:
+            temp_node = self.head
+            while temp_node.next_node.next_node:
+                temp_node = temp_node.next_node
+
+            last = temp_node.next_node
+            self.tail = temp_node
+            self.tail.next_node = None
+
+            self.size -= 1
+            return last.value
+        else:
+            return None
 
 
     def reverse_list(self):
@@ -236,12 +244,16 @@ class LinkedList:
         pass
 
 def main():
+    """
+    Main Docstring
+    :return: no return
+    """
 
-    '''linker = LinkedList()
+    linker = LinkedList()
 
-    #linker.push_front(3)
-    #linker.push_front(4)
-    #linker.push_front(5)
+    linker.push_front(3)
+    linker.push_front(4)
+    linker.push_front(5)
     linker.push_back(99)
     linker.push_back(109)
     #print(linker.size)
@@ -253,31 +265,18 @@ def main():
     temp_self = linker.head
     while temp_self is not None:
         print(temp_self.value)
-        temp_self = temp_self.next_node'''
+        temp_self = temp_self.next_node
 
-    linkl = LinkedList()
+    print('misc methods:')
+    print(linker.pop_front())
+    print(linker.pop_back())
 
-    # Add nodes
-    linkl.push_back(47)
-    linkl.push_front(39)
-    linkl.push_back(21)
-    linkl.push_front(58)
-    linkl.push_back(32)
-    linkl.push_front(94)
-    linkl.push_back(16)
-    linkl.push_front(77)
-    linkl.push_back(56)
-    linkl.push_front(21)
-    linkl.push_back(4)
-    linkl.push_front(79)
+    print('List Values:')
+    temp_self = linker.head
+    while temp_self is not None:
+        print(temp_self.value)
+        temp_self = temp_self.next_node
 
-    # Print results
-    print("OUTPUT")
-    print("Linked List: ", linkl)
-    print("Count of 21: ", linkl.count(21))
-    print("Count of 94: ", linkl.count(94))
-    print("Count of 43: ", linkl.count(43))
-        
 
 if __name__ == "__main__":
     main()
