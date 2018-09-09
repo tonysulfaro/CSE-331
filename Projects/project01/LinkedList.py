@@ -1,7 +1,7 @@
 ########################################
 # PROJECT 1 - Linked List
 # Author: Tony Sulfaro
-# PID:
+# PID: A52995491
 ########################################
 
 
@@ -254,7 +254,15 @@ class LinkedList:
         Reverses the values of the given linked list
         :return: no return
         """
-        pass
+        current_node = self.head
+        prev_node = None
+
+        while current_node is not None:
+            next_node = current_node.next_node
+            current_node.next_node = prev_node
+            prev_node = current_node
+            current_node = next_node
+        self.head = prev_node
 
 def main():
     """
@@ -262,40 +270,26 @@ def main():
     :return: no return
     """
 
-    linker = LinkedList()
+    stu = LinkedList()
+    sol = LinkedList()
 
-    linker.push_back(1)
-    linker.push_back(2)
-    linker.push_back(3)
-    linker.push_back(4)
-    linker.push_back(5)
+    stu.push_front(45)
+    stu.push_front(39)
+    stu.push_front(10)
+    stu.push_front(98)
+    stu.push_front(6)
+    sol.push_front(45)
+    sol.push_front(39)
+    sol.push_front(10)
+    sol.push_front(98)
+    sol.push_front(6)
 
-    print('size: ',linker.size)
+    stu.reverse_list()
+    sol.reverse_list()
 
-    print('Head: ', linker.head)
-    print('Tail: ', linker.tail)
-
-    print('List Values:')
-    temp_self = linker.head
-    while temp_self is not None:
-        print(temp_self.value)
-        temp_self = temp_self.next_node
-
-    print('misc methods:')
-    print(linker.front_value())
-    print(linker.back_value())
-    print(linker.pop_back())
-
-    print('List Values:')
-    temp_self = linker.head
-    while temp_self is not None:
-        print(temp_self.value)
-        temp_self = temp_self.next_node
-
-    print('size: ',linker.size)
-
-    print('Head: ', linker.head)
-    print('Tail: ', linker.tail)
+    assert sol == stu
+    print(sol)
+    print(stu)
 
 
 if __name__ == "__main__":
