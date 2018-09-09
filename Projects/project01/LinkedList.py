@@ -256,6 +256,7 @@ class LinkedList:
         """
         current_node = self.head
         prev_node = None
+        self.tail = self.head
 
         while current_node is not None:
             next_node = current_node.next_node
@@ -271,26 +272,29 @@ def main():
     """
 
     stu = LinkedList()
-    sol = LinkedList()
 
     stu.push_front(45)
     stu.push_front(39)
     stu.push_front(10)
     stu.push_front(98)
     stu.push_front(6)
-    sol.push_front(45)
-    sol.push_front(39)
-    sol.push_front(10)
-    sol.push_front(98)
-    sol.push_front(6)
 
-    stu.reverse_list()
-    sol.reverse_list()
-
-    assert sol == stu
-    print(sol)
     print(stu)
+    print('size: ', stu.size)
+    print('head: ', stu.head.value)
+    print('tail: ', stu.tail.value)
+    
+    stu.reverse_list()
+    print(stu)
+    print('size: ', stu.size)
+    print('head: ', stu.head.value)
+    print('tail: ', stu.tail.value)
 
+    '''current_node = stu.head
+    while current_node.next_node is not None:
+        print('node: ', current_node.value,' next: ', current_node.next_node.value)
+        current_node =  current_node.next_node'''
+    
 
 if __name__ == "__main__":
     main()
