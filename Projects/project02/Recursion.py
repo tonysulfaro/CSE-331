@@ -19,16 +19,22 @@ def insert(value, node=None):
 
 def string(node):
 
-    if node is not None:
+    if node is not None and node.next_node:  # first or n-1 element in the linked list
         return str(node.value) + ", " + string(node.next_node)
+
+    if node.next_node is None:  # last element in linked list
+        return str(node.value)
 
     return ''
 
 
 def reversed_string(node):
 
-    if node is not None:
+    if node is not None and node.next_node:
         return reversed_string(node.next_node) + ", " + str(node.value)
+
+    if node.next_node is None:
+        return str(node.value)
 
     return ''
 
