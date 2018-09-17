@@ -19,19 +19,18 @@ def insert(value, node=None):
 
 def string(node):
 
-    output = ""
+    if node is not None:
+        return str(node.value) + ", " + string(node.next_node)
 
-    output += str(node.value)
-    output += ', '
-
-    if node.next_node is None:
-        return output[:-2]
-
-    return string(node.next_node)
+    return ''
 
 
 def reversed_string(node):
-    pass
+
+    if node is not None:
+        return reversed_string(node.next_node) + ", " + str(node.value)
+
+    return ''
 
 
 def remove(value, node):
@@ -100,6 +99,8 @@ def main():
     print(length(linked_node))
     print(count(9, linked_node))
     print(search(0, linked_node))
+    print(string(linked_node))
+    print(reversed_string(linked_node))
 
 
 if __name__ == '__main__':
