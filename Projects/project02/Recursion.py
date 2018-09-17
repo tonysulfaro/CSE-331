@@ -80,8 +80,10 @@ def sum_all(node):
 
 def count(value, node):
 
-    if node.value == value:
-        return 1 + count(value, node.next_node)
+    if node is not None:
+        if value == node.value:
+            return 1 + count(value, node.next_node)
+        return count(value, node.next_node)
 
     return 0
 
@@ -97,7 +99,7 @@ def main():
 
     print(sum_all(linked_node))
     print(length(linked_node))
-    print(count(2, linked_node))
+    print(count(9, linked_node))
 
 
 if __name__ == '__main__':
