@@ -53,10 +53,9 @@ def remove_all(value, node):
 
 def search(value, node):
 
-    if node.value == value:
-        return True
-
-    if node.next_node is not None:
+    if node is not None:
+        if node.value == value:
+            return True
         return search(value, node.next_node)
 
     return False
@@ -100,6 +99,7 @@ def main():
     print(sum_all(linked_node))
     print(length(linked_node))
     print(count(9, linked_node))
+    print(search(0, linked_node))
 
 
 if __name__ == '__main__':
