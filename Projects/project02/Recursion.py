@@ -9,7 +9,7 @@ from LinkedNode import LinkedNode
 
 def insert(value, node=None):
 
-    if node is None or node.value > value:
+    if node is None or not node.value < value:
         return LinkedNode(value, None)
 
     node.next_node = insert(value, node.next_node)
@@ -64,15 +64,10 @@ def search(value, node):
 
 def length(node):
 
-    num = 0
-
     if node is not None:
-        num += 1
+        return 1 + length(node.next_node)
 
-    if node.next_ndoe is not None:
-        return length(node.next_node)
-
-    return num
+    return 0
 
 
 def sum_all(node):
@@ -85,27 +80,24 @@ def sum_all(node):
 
 def count(value, node):
 
-    num = 0
-
     if node.value == value:
-        num += 1
+        return 1 + count(value, node.next_node)
 
-    return count(value, node.next_node)
+    return 0
 
 
 def main():
 
     linked_node = insert(1, None)
 
-    linked_node = insert(2, linked_node)
-    linked_node = insert(3, linked_node)
-    linked_node = insert(4, linked_node)
-    linked_node = insert(5, linked_node)
+    insert(2, linked_node)
+    insert(3, linked_node)
+    insert(4, linked_node)
+    insert(5, linked_node)
 
-    node = linked_node
-    while node is not None:
-        print(node.value)
-        node = node.next_node
+    print(sum_all(linked_node))
+    print(length(linked_node))
+    print(count(2, linked_node))
 
 
 if __name__ == '__main__':
