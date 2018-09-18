@@ -52,7 +52,7 @@ def reversed_string(node):
     if node is not None and node.next_node is not None:
         return reversed_string(node.next_node) + ", " + str(node.value)
 
-    elif node.next_node is None and node is not None:
+    elif node is not None:
         return str(node.value)
 
     return ''
@@ -152,8 +152,8 @@ def main():
 
     linked_node = insert(5, None)
 
-    linked_node = insert(4, linked_node)
-    linked_node = insert(4, linked_node)
+    #linked_node = insert(4, linked_node)
+    #linked_node = insert(4, linked_node)
     linked_node = insert(4, linked_node)
     linked_node = insert(3, linked_node)
     linked_node = insert(2, linked_node)
