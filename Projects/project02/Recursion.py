@@ -83,9 +83,10 @@ def remove_all(value, node):
     """
 
     if node is not None and node.value == value:
-        return node.next_node
+        if node.next_node.value == value:
+            return remove_all(value, node.next_node)
     elif node is not None:
-        node.next_node = remove(value, node.next_node)
+        node.next_node = remove_all(value, node.next_node)
 
     return node
 
@@ -152,17 +153,13 @@ def main():
 
     linked_node = insert(5, None)
 
-    #linked_node = insert(4, linked_node)
-    #linked_node = insert(4, linked_node)
+    linked_node = insert(4, linked_node)
+    linked_node = insert(4, linked_node)
     linked_node = insert(4, linked_node)
     linked_node = insert(3, linked_node)
     linked_node = insert(2, linked_node)
+    linked_node = insert(4, linked_node)
     linked_node = insert(1, linked_node)
-
-    print(string(linked_node))
-    print(reversed_string(linked_node))
-
-    linked_node = remove(3, linked_node)
 
     print(string(linked_node))
 
