@@ -83,8 +83,11 @@ def remove_all(value, node):
     """
 
     if node is not None and node.value == value:
-        if node.next_node.value == value:
+        if node.next_node is not None and node.next_node.value == value:
             return remove_all(value, node.next_node)
+        elif node.next_node is not None and node.next_node.value != value:
+            return node
+        return node.next_node
     elif node is not None:
         node.next_node = remove_all(value, node.next_node)
 
@@ -151,15 +154,15 @@ def count(value, node):
 
 def main():
 
-    linked_node = insert(5, None)
+    linked_node = insert(1, None)
 
     linked_node = insert(4, linked_node)
     linked_node = insert(4, linked_node)
     linked_node = insert(4, linked_node)
     linked_node = insert(3, linked_node)
-    linked_node = insert(2, linked_node)
-    linked_node = insert(4, linked_node)
-    linked_node = insert(1, linked_node)
+    linked_node = insert(5, linked_node)
+    #linked_node = insert(4, linked_node)
+    #linked_node = insert(1, linked_node)
 
     print(string(linked_node))
 
