@@ -15,13 +15,13 @@ def insert(value, node=None):
     :return: node: head of linked list
     """
 
-    if node is None:
+    if node is None:  # if it is first node in linked list return just one node
         return LinkedNode(value, None)
 
-    if node.value >= value:
+    if node.value >= value:  # if value is less than head node, append to front
         return LinkedNode(value, node)
 
-    node.next_node = insert(value, node.next_node)
+    node.next_node = insert(value, node.next_node)  # append to back of linked list
 
     return node
 
@@ -49,10 +49,10 @@ def reversed_string(node):
     :return: string: string of linked list, comma delimited
     """
 
-    if node is not None and node.next_node is not None:
-        return reversed_string(node.next_node) + ", " + str(node.value)
+    if node is not None and node.next_node is not None:  # not last element in linked list
+        return reversed_string(node.next_node) + ", " + str(node.value)  # go through and append values in front of one another
 
-    elif node is not None:
+    elif node is not None:  # last element in linked list, omit comma
         return str(node.value)
 
     return ''
@@ -66,9 +66,9 @@ def remove(value, node):
     :return: node: linked list head
     """
 
-    if node is not None and node.value == value:
+    if node is not None and node.value == value:  # skip over value to remove from list
         return node.next_node
-    elif node is not None:
+    elif node is not None:  # keep searching
         node.next_node = remove(value, node.next_node)
 
     return node
@@ -82,13 +82,14 @@ def remove_all(value, node):
     :return: node: head of linked list
     """
 
-    if node is not None and node.value == value:
-        if node.next_node is not None and node.next_node.value == value:
-            return remove_all(value, node.next_node)
-        elif node.next_node is not None and node.next_node.value != value:
-            return node
+    # now this is some tom foolery
+    if node is not None and node.value == value:  # when the value matches
+        if node.next_node is not None and node.next_node.value == value:  # and the next value matches
+            return remove_all(value, node.next_node)  # keep checking if the next value matches
+        elif node.next_node is not None and node.next_node.value != value:  # found where the end of string of numbers
+            return node.next_node
         return node.next_node
-    elif node is not None:
+    elif node is not None:  # doesn't match value searching for
         node.next_node = remove_all(value, node.next_node)
 
     return node
@@ -102,10 +103,10 @@ def search(value, node):
     :return: bool: weather or not element is in the list
     """
 
-    if node is not None:
-        if node.value == value:
+    if node is not None:  # iterate through while valid nodes
+        if node.value == value:  # hey its in there
             return True
-        return search(value, node.next_node)
+        return search(value, node.next_node)  # keep looking
 
     return False
 
@@ -118,7 +119,7 @@ def length(node):
     """
 
     if node is not None:
-        return 1 + length(node.next_node)
+        return 1 + length(node.next_node)  # count nodes basically
 
     return 0
 
@@ -131,7 +132,7 @@ def sum_all(node):
     """
 
     if node is not None:
-        return node.value + sum_all(node.next_node)
+        return node.value + sum_all(node.next_node)  # tally those bad boys up
 
     return 0
 
@@ -145,7 +146,7 @@ def count(value, node):
     """
 
     if node is not None:
-        if value == node.value:
+        if value == node.value:  # basically same as length but only add if they match a value
             return 1 + count(value, node.next_node)
         return count(value, node.next_node)
 
