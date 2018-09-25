@@ -15,8 +15,9 @@ def main():
     a = [8, 2, 4, 9, 6, 3]
     sort(a)
     print(a)
-    b=[1,2,3,4,5,6]
+    b = [1, 2, 3, 4, 5, 6]
     sort(b)
     print(b)
+
 
 if __name__ == '__main__': main()
