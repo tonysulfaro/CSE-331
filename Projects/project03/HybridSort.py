@@ -9,14 +9,14 @@ def merge_sort(unsorted, threshold, reverse):
     n = len(unsorted)
 
     if n < threshold:
-        insertion_sort(unsorted, reverse)
+        insertion_sort(unsorted, reverse)  # Use insertion sort for sub lists
         return unsorted
 
     if n < 2:
-        return unsorted
+        return unsorted  # base case
     else:
         middle = n // 2
-        a = merge_sort(unsorted[:middle], threshold, reverse)
+        a = merge_sort(unsorted[:middle], threshold, reverse)  # Divide list by //2 and run again
         b = merge_sort(unsorted[middle:], threshold, reverse)
         return merge(a, b, reverse)
 
@@ -34,7 +34,7 @@ def merge(S1, S2, reverse):
 
     if reverse:
         while i + j < len(S):
-            if j == len(S2) or (i > len(S1) and S1[i] > S2[j]):
+            if j == len(S2) or (i < len(S1) and S1[i] > S2[j]):
                 S[i + j] = S1[i]
                 i = i + 1
             else:
@@ -104,7 +104,7 @@ def main():
     # print(unsorted)
 
     print('merge sort')
-    print(merge_sort(unsorted, 3, True))
+    print(merge_sort(unsorted, 1, True))
 
 
 if __name__ == "__main__":
