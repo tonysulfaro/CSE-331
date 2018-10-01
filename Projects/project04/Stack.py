@@ -92,14 +92,25 @@ class Stack:
         increases stack capacity by factor of 2
         :return: None
         """
-        pass
+        temp = self.data
+        self.size *= 2
+        self.data = [None] * self.size
+
+        for item in temp:
+            self.data.append(item)
 
     def shrink(self):
         """
         Shrinks list capacity by factor of 2
         :return: None
         """
-        pass
+        temp = self.data
+        self.size /= 2
+        self.data = [None] * self.size
+
+        for item in temp:
+            self.data.append(item)
+
 
 def reverse(stack):
     """
@@ -107,7 +118,8 @@ def reverse(stack):
     :param stack: Stack to be reversed
     :return: Reversed Stack
     """
-    pass
+    return reverse(stack)
+
 
 def replace(stack, old, new):
     """
@@ -117,4 +129,8 @@ def replace(stack, old, new):
     :param new: new value to replace it with
     :return: Stack of replaced values
     """
-    pass
+    new_stack = [None] * stack.size
+    for item in stack:
+        if item == old:
+            new_stack.append(new)
+        new_stack.append(item)
