@@ -76,7 +76,10 @@ class Stack:
         :param val: value to be added to top of stack
         :return: None
         """
-        self.data.append(val)
+        if self.size == self.capacity:
+            self.grow()
+        self.data[self.size] = val
+        self.size += 1
 
     def pop(self):
         """
@@ -85,7 +88,8 @@ class Stack:
         """
         if self.size == 0:
             return None
-        return self.pop()
+        self.size -= 1
+        return self.data.pop()
 
     def grow(self):
         """
