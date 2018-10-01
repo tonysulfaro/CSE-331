@@ -1,7 +1,7 @@
 """
 # Project 4
-# Name:
-# PID:
+# Name: Tony Sulfaro
+# PID: A52995491
 """
 
 class Stack:
@@ -50,28 +50,71 @@ class Stack:
         return True
 
     def stack_size(self):
-        pass
+        """
+        returns size of stack
+        :return: int size
+        """
+        return self.size
 
     def is_empty(self):
-        pass
+        """
+        checks if stack is empty
+        :return: bool
+        """
+        return self.size == 0
 
     def top(self):
-        pass
+        """
+        gets item at top of stack
+        :return: top of stack
+        """
+        return self.data[-1]
 
     def push(self, val):
-        pass
+        """
+        add new value into stack
+        :param val: value to be added to top of stack
+        :return: None
+        """
+        self.data.append(val)
 
     def pop(self):
-        pass
+        """
+        pop last element out of stack
+        :return: popped item if it exists, None otherwise
+        """
+        if self.size == 0:
+            return None
+        return self.pop()
 
     def grow(self):
+        """
+        increases stack capacity by factor of 2
+        :return: None
+        """
         pass
 
     def shrink(self):
+        """
+        Shrinks list capacity by factor of 2
+        :return: None
+        """
         pass
 
 def reverse(stack):
+    """
+    Reverses stack using a queue
+    :param stack: Stack to be reversed
+    :return: Reversed Stack
+    """
     pass
 
 def replace(stack, old, new):
+    """
+    Replace values in old stack with that of the new one
+    :param stack: Stack to do replacing on
+    :param old: old value to search for
+    :param new: new value to replace it with
+    :return: Stack of replaced values
+    """
     pass
