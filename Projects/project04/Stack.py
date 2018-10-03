@@ -142,8 +142,12 @@ def replace(stack, old, new):
     :param new: new value to replace it with
     :return: Stack of replaced values
     """
-    new_stack = [None] * stack.size
+    new_stack = Stack(stack.size)
+
     for item in stack.data:
         if item == old:
-            new_stack.append(new)
-        new_stack.append(item)
+            new_stack.push(new)
+        else:
+            new_stack.push(item)
+
+    return new_stack
