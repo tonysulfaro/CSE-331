@@ -88,20 +88,23 @@ class Stack:
         """
         if self.size == 0:
             return None
+        popped = self.data[self.size-1]
+        self.data[self.size-1] = None
         self.size -= 1
-        return self.data.pop()
+        return popped
 
     def grow(self):
         """
         increases stack capacity by factor of 2
         :return: None
         """
-        temp = self.data
-        self.size *= 2
-        self.data = [None] * self.size
+        temp = [None] * (self.size * 2)
 
-        for item in temp:
-            self.data.append(item)
+        for x in range(self.size):
+            temp[x] = self.data[x]
+
+        self.data = temp
+        self.capacity *= 2
 
     def shrink(self):
         """
@@ -122,7 +125,13 @@ def reverse(stack):
     :param stack: Stack to be reversed
     :return: Reversed Stack
     """
-    return reverse(stack)
+    size = stack.size
+    new_stack = Stack(size)
+
+    for item in stack.data:
+        new_stack.push(stack.pop())
+
+    return new_stack
 
 
 def replace(stack, old, new):
@@ -134,7 +143,7 @@ def replace(stack, old, new):
     :return: Stack of replaced values
     """
     new_stack = [None] * stack.size
-    for item in stack:
+    for item in stack.data:
         if item == old:
             new_stack.append(new)
         new_stack.append(item)
