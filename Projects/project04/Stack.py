@@ -88,9 +88,14 @@ class Stack:
         """
         if self.size == 0:
             return None
+
         popped = self.data[self.size-1]
         self.data[self.size-1] = None
         self.size -= 1
+
+        if self.capacity / self.size >= 2:
+            self.shrink()
+
         return popped
 
     def grow(self):
@@ -111,12 +116,13 @@ class Stack:
         Shrinks list capacity by factor of 2
         :return: None
         """
-        temp = self.data
-        self.size /= 2
-        self.data = [None] * self.size
+        temp = [None] * (self.capacity // 2)
 
-        for item in temp:
-            self.data.append(item)
+        for x in range(self.size):
+            temp[x] = self.data[x]
+
+        self.data = temp
+        self.capacity //= 2
 
 
 def reverse(stack):
