@@ -68,7 +68,7 @@ class Stack:
         gets item at top of stack
         :return: top of stack
         """
-        return self.data[-1]
+        return self.data[self.size-1]
 
     def push(self, val):
         """
@@ -93,8 +93,9 @@ class Stack:
         self.data[self.size-1] = None
         self.size -= 1
 
-        if self.capacity / self.size >= 2:
-            self.shrink()
+        if self.size >= 1:
+            if self.capacity / self.size >= 2:
+                self.shrink()
 
         return popped
 
@@ -116,6 +117,9 @@ class Stack:
         Shrinks list capacity by factor of 2
         :return: None
         """
+        if self.capacity <= 2:
+            return
+
         temp = [None] * (self.capacity // 2)
 
         for x in range(self.size):
