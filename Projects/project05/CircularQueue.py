@@ -110,8 +110,13 @@ class CircularQueue():
         """
         temp = [None] * (self.size * 2)
 
-        for x in range(self.size):
-            temp[x-self.head] = self.data[x]
+        for x in range(self.head, self.capacity):
+            temp[x - self.head] = self.data[x]
+        for x in range(0, self.head):
+            temp[x + self.capacity - self.head] = self.data[x]
+
+        self.head = 0
+        self.tail = self.size
 
         self.data = temp
         self.capacity *= 2
@@ -127,7 +132,7 @@ class CircularQueue():
         temp = [None] * (self.capacity // 2)
 
         for x in range(self.head, self.tail):
-            temp[x-self.head] = self.data[x]
+            temp[x - self.head] = self.data[x]
 
         self.data = temp
         self.tail = self.size
@@ -161,12 +166,10 @@ def main():
     test.enqueue(5)
     test.enqueue(5)
     test.dequeue()
-    test.dequeue()
-    test.dequeue()
-    test.dequeue()
-    test.dequeue()
-
-
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
 
     print(test)
 

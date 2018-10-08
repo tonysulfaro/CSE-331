@@ -2,7 +2,7 @@ from CircularQueue import CircularQueue
 
 
 def main():
-    test = CircularQueue(10)
+    test = CircularQueue(15)
     test.enqueue(3)
     test.enqueue(3)
     test.enqueue(3)
@@ -27,8 +27,8 @@ def main():
     test.dequeue()
     test.dequeue()
     test.dequeue()
-    # test.dequeue()
-    # test.dequeue()
+    test.dequeue()
+    test.dequeue()
     # test.dequeue()
     # test.dequeue()
     # test.dequeue()
