@@ -72,19 +72,21 @@ class CircularQueue():
         :param val: int - element to be added
         :return: None
         """
-        self.data[self.size] = val
+        self.data[self.tail] = val
         self.size += 1
 
         if self.size == self.capacity:
             self.grow()
 
-        self.tail = self.size % self.capacity
+        self.tail = (self.size + self.head) % self.capacity
 
     def dequeue(self):
         """
         Pop element from front of queue
         :return: int - popped element
         """
+        if self.size == 0:
+            return
         popped = self.data[self.head]
         self.data[self.head] = None
         self.size -= 1
@@ -93,6 +95,7 @@ class CircularQueue():
         if self.head == self.tail:
             self.head = 0
             self.tail = 0
+            self.size = 0
 
         if self.size >= 1:
             if self.capacity / self.size >= 4:
@@ -108,7 +111,7 @@ class CircularQueue():
         temp = [None] * (self.size * 2)
 
         for x in range(self.size):
-            temp[x] = self.data[x]
+            temp[x-self.head] = self.data[x]
 
         self.data = temp
         self.capacity *= 2
@@ -118,7 +121,7 @@ class CircularQueue():
         Decreases self.capacity by 2 when it is using 1/4 of its total capacity
         :return: None
         """
-        if self.capacity <= 4:
+        if self.capacity < 8:
             return
 
         temp = [None] * (self.capacity // 2)
@@ -133,14 +136,14 @@ class CircularQueue():
 
 
 def main():
-    test = CircularQueue()
+    test = CircularQueue(8)
     test.enqueue(3)
-    test.enqueue(4)
-    test.enqueue(5)
-    test.enqueue(6)
     test.enqueue(3)
-    test.enqueue(5)
-    test.enqueue(6)
+    test.enqueue(3)
+    test.enqueue(3)
+    test.enqueue(3)
+    test.enqueue(3)
+    test.enqueue(3)
     test.enqueue(3)
 
     print(test)
@@ -153,9 +156,17 @@ def main():
     test.dequeue()
     test.dequeue()
     test.dequeue()
+    test.enqueue(5)
+    test.enqueue(5)
+    test.enqueue(5)
+    test.enqueue(5)
     test.dequeue()
     test.dequeue()
-    test.enqueue(4)
+    test.dequeue()
+    test.dequeue()
+    test.dequeue()
+
+
 
     print(test)
 
