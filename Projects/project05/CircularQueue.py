@@ -92,11 +92,6 @@ class CircularQueue():
         self.size -= 1
         self.head += 1
 
-        if self.head == self.tail:
-            self.head = 0
-            self.tail = 0
-            self.size = 0
-
         if self.size >= 1:
             if self.capacity / self.size >= 4:
                 self.shrink()
@@ -126,14 +121,23 @@ class CircularQueue():
         Decreases self.capacity by 2 when it is using 1/4 of its total capacity
         :return: None
         """
+        # don't shrink if it will be less than 4
         if self.capacity < 8:
             return
 
+        # initialize new reduced size list
         temp = [None] * (self.capacity // 2)
 
-        for x in range(self.head, self.tail):
-            temp[x - self.head] = self.data[x]
+        # add in values from head to capacity if they are not none
+        for x in range(self.head, self.capacity):
+            if self.data[x] is not None:
+                temp[x - self.head] = self.data[x]
+        # if there are values before the head when head != 0 add them
+        if self.tail < self.head:
+            for x in range(0, self.tail):
+                temp[self.size - self.tail] = self.data[x]
 
+        # update object attributes
         self.data = temp
         self.tail = self.size
         self.head = 0
@@ -142,14 +146,14 @@ class CircularQueue():
 
 def main():
     test = CircularQueue(8)
+    test.enqueue(1)
+    test.enqueue(2)
     test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
-    test.enqueue(3)
+    test.enqueue(4)
+    test.enqueue(5)
+    test.enqueue(6)
+    test.enqueue(7)
+    test.enqueue(8)
 
     print(test)
 
@@ -159,17 +163,10 @@ def main():
     test.dequeue()
     test.dequeue()
     test.dequeue()
-    test.dequeue()
-    test.dequeue()
-    test.enqueue(5)
-    test.enqueue(5)
-    test.enqueue(5)
-    test.enqueue(5)
-    test.dequeue()
-    # test.dequeue()
-    # test.dequeue()
-    # test.dequeue()
-    # test.dequeue()
+    #test.dequeue()
+    #test.dequeue()
+    #test.dequeue()
+    #test.dequeue()
 
     print(test)
 
