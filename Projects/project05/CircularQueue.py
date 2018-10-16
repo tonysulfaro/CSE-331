@@ -72,6 +72,7 @@ class CircularQueue():
         :param val: int - element to be added
         :return: None
         """
+        # add new item in
         self.data[self.tail] = val
         self.size += 1
 
@@ -85,13 +86,17 @@ class CircularQueue():
         Pop element from front of queue
         :return: int - popped element
         """
+        # don't pop an empty queue
         if self.size == 0:
             return
+
+        # get popped item and adjust object attributes
         popped = self.data[self.head]
         self.data[self.head] = None
         self.size -= 1
-        self.head += 1
+        self.head = (self.head + 1) % self.capacity
 
+        # check weather to shrink
         if self.size >= 1:
             if self.capacity / self.size >= 4:
                 self.shrink()
@@ -103,16 +108,19 @@ class CircularQueue():
         Increases self.data capacity by 2
         :return: None
         """
+        # initialize new array to put values in
         temp = [None] * (self.size * 2)
 
+        # copy over ones starting at the head
         for x in range(self.head, self.capacity):
             temp[x - self.head] = self.data[x]
+        # copy over ones up til the head if they exist
         for x in range(0, self.head):
             temp[x + self.capacity - self.head] = self.data[x]
 
+        # adjust object attributes
         self.head = 0
         self.tail = self.size
-
         self.data = temp
         self.capacity *= 2
 
@@ -147,26 +155,39 @@ class CircularQueue():
 def main():
     test = CircularQueue(8)
     test.enqueue(1)
+    test.dequeue()
     test.enqueue(2)
+    test.dequeue()
     test.enqueue(3)
+    test.dequeue()
     test.enqueue(4)
+    test.dequeue()
     test.enqueue(5)
+    test.dequeue()
     test.enqueue(6)
+    test.dequeue()
     test.enqueue(7)
+    test.dequeue()
     test.enqueue(8)
+    # test.enqueue(9)
+    # test.enqueue(10)
+    # test.enqueue(11)
+    # test.enqueue(12)
+    # test.enqueue(13)
+    # test.enqueue(14)
 
     print(test)
 
     print('REMOVE')
 
-    test.dequeue()
-    test.dequeue()
-    test.dequeue()
-    test.dequeue()
-    #test.dequeue()
-    #test.dequeue()
-    #test.dequeue()
-    #test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
+    # test.dequeue()
 
     print(test)
 
