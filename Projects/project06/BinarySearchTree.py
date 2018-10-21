@@ -93,6 +93,11 @@ class BinarySearchTree:
     ### Implement/Modify the functions below ###
 
     def insert(self, value):
+        """
+        Inserts value into binary tree
+        :param value: value to insert into tree
+        :return: No Return
+        """
 
         new_node = Node(value)
 
@@ -121,19 +126,43 @@ class BinarySearchTree:
         self.size += 1
 
     def remove(self, value):
+        """
+        removes element from binary tree if it exists
+        :param value: value to search for and delete form tree
+        :return: No Return
+        """
 
+        # value matches, remove
         if self.root.value == value:
-            new_root = min(self.root.right)
+
+            # left leaf is empty, shift tree
+            if self.root.left is None:
+                pass
+            # right leaf is empty, shift tree
+            elif self.root.right is None:
+                pass
+
+            # replace root with lesser value in right side of tree
+            new_root = self.min(self.root.right)
             self.root.value = new_root.value
 
+        # value is greater than root, search right side
         elif self.root.value < value:
             self.remove(self.root.right)
+
+        # value is lesser than root, search left side
         elif self.root.value > value:
             self.remove(self.root.left)
 
         self.size -= 1
 
     def search(self, value, node):
+        """
+        Searches for a given value with a starting root node
+        :param value: value to search for
+        :param node: Node from which to complete the search (doesn't have to be the absolute root)
+        :return: node - found node or potential parent node if not found
+        """
 
         if value == node.value:
             return node
@@ -148,6 +177,11 @@ class BinarySearchTree:
         return node
 
     def inorder(self, node):
+        """
+        yields inorder traversal of binary tree given starting root
+        :param node: root of binary tree to start at
+        :return: generator for in order traversal
+        """
 
         if node is None:
             return
@@ -169,6 +203,11 @@ class BinarySearchTree:
         pass
 
     def height(self, node):
+        """
+        Finds height of the tree by counting parents
+        :param node: Leaf or body node to start at
+        :return: int - height of the tree from node
+        """
 
         if node.parent is None:
             return 0
@@ -176,6 +215,11 @@ class BinarySearchTree:
         return 1 + self.height(self, node.parent)
 
     def min(self, node):
+        """
+        Finds minimum value in binary tree given a starting root node
+        :param node: Root Node to start at
+        :return: Node - Minimum Node
+        """
 
         if node.left is None:
             return node
@@ -183,6 +227,11 @@ class BinarySearchTree:
         return self.min(node.left)
 
     def max(self, node):
+        """
+        Finds maximum value in a binary tree given a starting root node
+        :param node: Root Node to start at
+        :return: Node - Maximum Node
+        """
 
         if node.right is None:
             return node
@@ -190,6 +239,10 @@ class BinarySearchTree:
         return self.max(node.right)
 
     def get_size(self):
+        """
+        Gets size of tree
+        :return: int - tree size
+        """
 
         return self.size
 
