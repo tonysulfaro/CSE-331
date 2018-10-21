@@ -1,3 +1,10 @@
+"""
+# Project 6 - Binary Search Tree
+# Name: Tony Sulfaro
+# PID: A52995491
+"""
+
+
 class Node:
     # DO NOT MODIFY THIS CLASS #
     __slots__ = 'value', 'parent', 'left', 'right'
@@ -87,19 +94,67 @@ class BinarySearchTree:
 
     def insert(self, value):
 
-        pass
+        new_node = Node(value)
+
+        if self.root is None:
+            self.root = new_node
+        else:
+            cur = self.root
+            while cur is not None:
+                if new_node.value == cur.value:
+                    self.size -= 1
+                if new_node.value < cur.value:
+                    if cur.left is None:
+                        new_node.parent = cur
+                        cur.left = new_node
+                        cur = None
+                    else:
+                        cur = cur.left
+                else:
+                    if cur.right is None:
+                        new_node.parent = cur
+                        cur.right = new_node
+                        cur = None
+                    else:
+                        cur = cur.right
+
+        self.size += 1
 
     def remove(self, value):
 
-        pass
+        if self.root.value == value:
+            new_root = min(self.root.right)
+            self.root.value = new_root.value
+
+        elif self.root.value < value:
+            self.remove(self.root.right)
+        elif self.root.value > value:
+            self.remove(self.root.left)
+
+        self.size -= 1
 
     def search(self, value, node):
 
-        pass
+        if value == node.value:
+            return node
+
+        elif value <= node.value:
+            if node.left is not None:
+                return self.search(value, node.left)
+        elif value > node.value:
+            if node.right is not None:
+                return self.search(value, node.right)
+
+        return node
 
     def inorder(self, node):
 
-        pass
+        if node is None:
+            return
+
+        yield self.inorder(node.left)
+        yield node
+        yield self.inorder(node.right)
 
     def preorder(self, node):
 
@@ -115,19 +170,28 @@ class BinarySearchTree:
 
     def height(self, node):
 
-        pass
+        if node.parent is None:
+            return 0
+
+        return 1 + self.height(self, node.parent)
 
     def min(self, node):
 
-        pass
+        if node.left is None:
+            return node
+
+        return self.min(node.left)
 
     def max(self, node):
 
-        pass
+        if node.right is None:
+            return node
+
+        return self.max(node.right)
 
     def get_size(self):
 
-        pass
+        return self.size
 
     def is_perfect(self, node):
 
@@ -136,3 +200,25 @@ class BinarySearchTree:
     def is_degenerate(self):
 
         pass
+
+
+def main():
+    tree = BinarySearchTree()
+    print(tree.size)
+    print(tree.root)
+
+    tree.insert(2)
+    tree.insert(5)
+    tree.insert(7)
+    tree.insert(7)
+
+    print('Size:')
+    print(tree.size)
+    print('Values:')
+    print(tree.root)
+    print(tree.root.right)
+    print(tree.root.right.right)
+
+
+if __name__ == '__main__':
+    main()
