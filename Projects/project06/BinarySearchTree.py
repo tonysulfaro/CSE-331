@@ -107,7 +107,7 @@ class BinarySearchTree:
             cur = self.root
             while cur is not None:
                 if new_node.value == cur.value:
-                    self.size -= 1
+                    return
                 if new_node.value < cur.value:
                     if cur.left is None:
                         new_node.parent = cur
@@ -167,40 +167,67 @@ class BinarySearchTree:
         if value == node.value:
             return node
 
-        elif value <= node.value:
-            if node.left is not None:
-                return self.search(value, node.left)
+        elif value < node.value:
+            return self.search(value, node.left)
+
         elif value > node.value:
-            if node.right is not None:
-                return self.search(value, node.right)
+            return self.search(value, node.right)
 
         return node
 
     def inorder(self, node):
         """
         yields inorder traversal of binary tree given starting root
+        (Left, Root, Right)
         :param node: root of binary tree to start at
         :return: generator for in order traversal
         """
 
         if node is None:
             return
-
-        yield self.inorder(node.left)
-        yield node
-        yield self.inorder(node.right)
+        else:
+            yield from self.inorder(node.left)
+            yield node.value
+            yield from self.inorder(node.right)
 
     def preorder(self, node):
-
-        pass
+        """
+        yeilds preorder traversal of binary tree giving starting root
+        (Root, Left, Right)
+        :param node: root of binary tree to start at
+        :return: generator for in order traversal
+        """
+        if node is None:
+            return
+        else:
+            yield node.value
+            yield from self.preorder(node.left)
+            yield from self.preorder(node.right)
 
     def postorder(self, node):
-
-        pass
+        """
+        yeilds postorder traversal of binary tree giving starting root
+        (Left, Right, Root)
+        :param node: root of binary tree to start at
+        :return: generator for in order traversal
+        """
+        if node is None:
+            return
+        else:
+            yield from self.postorder(node.left)
+            yield from self.postorder(node.right)
+            yield node.value
 
     def depth(self, value):
 
-        pass
+        node = self.search(value, self.root)
+        if node is None:
+            return -1
+
+        left_depth = self.height(node.left)
+        right_depth = self.height(node.right)
+
+        return 2 + max(left_depth, right_depth)
 
     def height(self, node):
         """
@@ -209,10 +236,12 @@ class BinarySearchTree:
         :return: int - height of the tree from node
         """
 
-        if node.parent is None:
-            return 0
+        if node is None:
+            return -1
 
-        return 1 + self.height(self, node.parent)
+        left_height = self.height(node.left)
+        right_height = self.height(node.right)
+        return 1 + max(left_height, right_height)
 
     def min(self, node):
         """
@@ -260,17 +289,29 @@ def main():
     print(tree.size)
     print(tree.root)
 
-    tree.insert(2)
     tree.insert(5)
-    tree.insert(7)
-    tree.insert(7)
+    tree.insert(1)
+    tree.insert(4)
+    tree.insert(8)
+    tree.insert(3)
+    tree.insert(2)
 
     print('Size:')
     print(tree.size)
-    print('Values:')
+    print('Root:')
     print(tree.root)
-    print(tree.root.right)
-    print(tree.root.right.right)
+
+    print('inorder:')
+    for value in tree.inorder(tree.root):
+        print(value)
+
+    print('preorder:')
+    for value in tree.preorder(tree.root):
+        print(value)
+
+    print('postorder:')
+    for value in tree.postorder(tree.root):
+        print(value)
 
 
 if __name__ == '__main__':
