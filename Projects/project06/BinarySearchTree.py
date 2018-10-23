@@ -253,7 +253,12 @@ class BinarySearchTree:
         if node.left is None:
             return node
 
-        return self.min(node.left)
+        left_min = self.min(node.left)
+        right_min = self.min(node.right)
+
+        if left_min.value < right_min.value:
+            return left_min
+        return right_min
 
     def max(self, node):
         """
@@ -263,7 +268,7 @@ class BinarySearchTree:
         """
 
         if node.right is None:
-            return node
+            return Node
 
         return self.max(node.right)
 
