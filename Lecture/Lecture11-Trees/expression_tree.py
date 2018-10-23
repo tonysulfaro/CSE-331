@@ -1,5 +1,5 @@
-
 from linked_binary_tree import LinkedBinaryTree
+
 
 class ExpressionTree(LinkedBinaryTree):
     """An arithmetic expression tree."""
@@ -107,13 +107,13 @@ def build_expression_tree(tokens):
 
 
 if __name__ == '__main__':
-    very_small=build_expression_tree(tokenize('(3+1)/4'))
-    small=build_expression_tree(tokenize('(3+1)x3)'))
+    very_small = build_expression_tree(tokenize('(3+1)/4'))
+    small = build_expression_tree(tokenize('(3+1)x3)'))
     # big = build_expression_tree(tokenize('((((3+1)x3)/((9-5)+2))-((3x(7-4))+6))'))
 
     # print(big, '=', big.evaluate())
     small = build_expression_tree(tokenize('((5+1)x3)'))
     very_small = build_expression_tree(tokenize('(1+(2+5))x6)'))
-    simple=build_expression_tree(tokenize('3+5+5*10/2'))
+    simple = build_expression_tree(tokenize('3+5+5*10/2'))
     print(small, '=', small.evaluate())
     print(very_small, '=', very_small.evaluate())
