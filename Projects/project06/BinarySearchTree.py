@@ -164,14 +164,15 @@ class BinarySearchTree:
         :return: node - found node or potential parent node if not found
         """
 
-        if value == node.value:
-            return node
+        if node is not None:
+            if value == node.value:
+                return node
 
-        elif value < node.value:
-            return self.search(value, node.left)
+            elif value < node.value:
+                return self.search(value, node.left)
 
-        elif value > node.value:
-            return self.search(value, node.right)
+            elif value > node.value:
+                return self.search(value, node.right)
 
         return node
 
@@ -252,13 +253,8 @@ class BinarySearchTree:
 
         if node.left is None:
             return node
-
-        left_min = self.min(node.left)
-        right_min = self.min(node.right)
-
-        if left_min.value < right_min.value:
-            return left_min
-        return right_min
+        else:
+            return self.min(node.left)
 
     def max(self, node):
         """
@@ -268,9 +264,9 @@ class BinarySearchTree:
         """
 
         if node.right is None:
-            return Node
-
-        return self.max(node.right)
+            return node
+        else:
+            return self.max(node.right)
 
     def get_size(self):
         """

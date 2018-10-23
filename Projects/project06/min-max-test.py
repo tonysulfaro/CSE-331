@@ -11,8 +11,10 @@ bst.insert(37)
 bst.insert(157)
 bst.insert(69)
 
-print(bst.min(bst.root).value)
-print(bst.max(bst.root).value)
+min = bst.min(bst.root).value
+max = bst.max(bst.root).value
 
-#assert bst.min(bst.root).value == 1
-#assert bst.max(bst.root).value == 157
+print(min, max)
+
+assert bst.min(bst.root).value == 1
+assert bst.max(bst.root).value == 157
