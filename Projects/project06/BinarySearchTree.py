@@ -132,29 +132,63 @@ class BinarySearchTree:
         :return: No Return
         """
 
-        # value matches, remove
-        if self.root.value == value:
+        if self.root is None:
+            return
 
-            # left leaf is empty, shift tree
-            if self.root.left is None:
-                pass
-            # right leaf is empty, shift tree
-            elif self.root.right is None:
-                pass
+        par = None
+        cur = self.root
+        while cur is not None:  # iterate through tree
+            if cur.value == value:  # found matching node
+                if not cur.left and not cur.right:  # remove leaf
+                    if not par:  # node is root
+                        self.root = None
+                    elif par.left == cur:
+                        par.left = None
+                    else:
+                        par.right = None
 
-            # replace root with lesser value in right side of tree
-            new_root = self.min(self.root.right)
-            self.root.value = new_root.value
+                elif cur.left and not cur.right:  # remove one left child
+                    if not par:  # node is root:
+                        self.root = cur.left
+                    elif par.left == cur:
+                        par.left = cur.left
+                    else:
+                        par.right = cur.left
+                        cur.left.parent = par
 
-        # value is greater than root, search right side
-        elif self.root.value < value:
-            self.remove(self.root.right)
+                elif not cur.left and cur.right:  # Remove node with only right child
+                    if not par:  # node is root
+                        self.root = cur.right
+                    elif par.left == cur:
+                        par.left = cur.right
+                    else:
+                        par.right = cur.right
+                        cur.right.parent = par
 
-        # value is lesser than root, search left side
-        elif self.root.value > value:
-            self.remove(self.root.left)
+                else:  # Remove node with two children
+                    # Find successor (leftmost child of right subtree)
+                    suc = self.min(cur.right)
+                    successorData = Node(suc.value, None)
+                    successorData.left = self.root.left
+                    successorData.right = self.root.right
+                    suc.parent.left = None
+                    # Assign cur's data with successorData
+                    self.root = successorData
+                    self.root.right.parent = self.root
+                    self.root.left.parent = self.root
 
-        self.size -= 1
+                self.size -= 1
+                return  # Node found and removed
+
+            elif cur.value < value:  # Search right
+                par = cur
+                cur = cur.right
+
+            else:  # Search left
+                par = cur
+                cur = cur.left
+
+        return  # Node not found
 
     def search(self, value, node):
         """
@@ -164,17 +198,33 @@ class BinarySearchTree:
         :return: node - found node or potential parent node if not found
         """
 
-        if node is not None:
-            if value == node.value:
+        # if value == node.value:
+        #     return Node(node.value, node.parent, node.left, node.right)
+        #
+        # elif value < node.value:
+        #     if node.left is None:
+        #         return Node(node.value, node.parent, node.left, node.right)
+        #     else:
+        #         return self.search(value, node.left)
+        #
+        # elif value > node.value:
+        #     if node.right is None:
+        #         return Node(node.value, node.parent, node.left, node.right)
+        #     else:
+        #         return self.search(value, node.right)
+
+        if node.value == value:
+            return node
+        elif value < node.value:
+            if node.left is None:
                 return node
-
-            elif value < node.value:
+            else:
                 return self.search(value, node.left)
-
-            elif value > node.value:
+        elif value > node.value:
+            if node.right is None:
+                return node
+            else:
                 return self.search(value, node.right)
-
-        return node
 
     def inorder(self, node):
         """
@@ -220,15 +270,20 @@ class BinarySearchTree:
             yield node.value
 
     def depth(self, value):
+        """
+        get depth of tree from root to value
+        :param value: value to search for
+        :return: int - depth of value relative to root
+        """
 
-        node = self.search(value, self.root)
-        if node is None:
+        if self.root is None:
             return -1
 
-        left_depth = self.height(node.left)
-        right_depth = self.height(node.right)
+        node = self.search(value, self.root)
 
-        return 2 + max(left_depth, right_depth)
+        node_height = self.height(node)
+        root_height = self.height(self.root)
+        return root_height - node_height
 
     def height(self, node):
         """
