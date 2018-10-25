@@ -13,3 +13,4 @@ Sources Used:
 * CSE 331 Lectures 11,12,13
 * Zybooks Section 24 (For Remove, Height)
 * [Stack Overflow - "What does the “yield” keyword do?"](https://stackoverflow.com/questions/231767/what-does-the-yield-keyword-do)
+* [Stack Overflow - Yield traversal](https://stackoverflow.com/questions/29799667/using-generators-to-perform-an-inorder-tree-traversal-on-a-bst)

@@ -173,27 +173,21 @@ class BinarySearchTree:
                     # Find successor (leftmost child of right subtree)
                     suc = self.min(cur.right)
                     self.remove(suc.value)
-                    successorData = Node(suc.value, None)
-                    successorData.left = cur.left
-                    successorData.right = cur.right
-                    successorData.parent = par
 
-                    # Assign children of new node to new parent
-                    if successorData.left is not None:
-                        successorData.left.parent = successorData
-                    if successorData.right is not None:
-                        successorData.right.parent = successorData
+                    self.size += 1
 
-                    # Assign cur's data with successorData
-                    if cur.parent is not None:
-                        if cur.parent.left == cur:
-                            cur.parent.left = successorData
-                        if cur.parent.right == cur:
-                            cur.parent.right = successorData
-                    cur = successorData
+                    suc.left = cur.left
+                    suc.right = cur.right
+                    suc.parent = cur.parent
+
+                    if cur.left is not None:
+                        cur.left.parent = suc
+                    if cur.right is not None:
+                        cur.right.parent = suc
 
                     if cur.parent is None:
-                        self.root = successorData
+                        self.root = suc
+                    cur = suc
 
                 self.size -= 1
                 return  # Node found and removed
@@ -216,13 +210,18 @@ class BinarySearchTree:
         :return: node - found node or potential parent node if not found
         """
 
-        if node.value == value:
+        # match or invalid node
+        if node is None or node.value == value:
             return node
-        elif value < node.value:
+
+        # search left if value is lesser
+        if value < node.value:
             if node.left is None:
                 return node
             else:
                 return self.search(value, node.left)
+
+        # search right if value is greater
         elif value > node.value:
             if node.right is None:
                 return node
@@ -274,21 +273,23 @@ class BinarySearchTree:
 
     def depth(self, value):
         """
-        get depth of tree from root to value
+        get depth of tree from root to value by iterating through the tree
         :param value: value to search for
-        :return: int - depth of value relative to root
+        :return: int - depth of value relative to root, -1 if not found
         """
 
-        if self.root is None:
-            return -1
-
-        node = self.search(value, self.root)
-        if node.value != value:
-            return -1
-
-        node_height = self.height(node)
-        root_height = self.height(self.root)
-        return root_height - node_height
+        count = 0
+        cur = self.root
+        while cur is not None:
+            if cur.value == value:
+                return count
+            if cur.value < value:
+                cur = cur.right
+                count += 1
+            elif cur.value > value:
+                cur = cur.left
+                count += 1
+        return -1
 
     def height(self, node):
         """
@@ -311,7 +312,7 @@ class BinarySearchTree:
         :return: Node - Minimum Node
         """
 
-        if node.left is None:
+        if node is None or node.left is None:
             return node
         else:
             return self.min(node.left)
@@ -323,7 +324,7 @@ class BinarySearchTree:
         :return: Node - Maximum Node
         """
 
-        if node.right is None:
+        if node is None or node.right is None:
             return node
         else:
             return self.max(node.right)
@@ -338,41 +339,41 @@ class BinarySearchTree:
 
     def is_perfect(self, node):
 
-        pass
+        # empty tree
+        if node is None:
+            return True
+
+        # only one element in tree
+        if node is not None and node.left is None and node.right is None:
+            return True
+
+        # fully loaded tree
+        if self.size == 2 ** (self.height(self.root) + 1) - 1:
+            return True
+
+        return False
 
     def is_degenerate(self):
-        # if size == height+1
+
+        if self.is_perfect(self.root):
+            return False
         return self.size == self.height(self.root) + 1
 
 
 def main():
-    tree = BinarySearchTree()
-    print(tree.size)
-    print(tree.root)
+    bst = BinarySearchTree()
 
-    tree.insert(5)
-    tree.insert(1)
-    tree.insert(4)
-    tree.insert(8)
-    tree.insert(3)
-    tree.insert(2)
+    bst.insert(10)
+    bst.insert(8)
+    bst.insert(12)
+    bst.insert(7)
+    bst.insert(9)
+    bst.insert(11)
+    bst.insert(13)
 
-    print('Size:')
-    print(tree.size)
-    print('Root:')
-    print(tree.root)
+    bst.remove(12)
 
-    print('inorder:')
-    for value in tree.inorder(tree.root):
-        print(value)
-
-    print('preorder:')
-    for value in tree.preorder(tree.root):
-        print(value)
-
-    print('postorder:')
-    for value in tree.postorder(tree.root):
-        print(value)
+    print('done')
 
 
 if __name__ == '__main__':
