@@ -291,6 +291,7 @@ class BinarySearchTree:
 
         count = 0
         cur = self.root
+        # essentially search but count how many times you move down a level
         while cur is not None:
             if cur.value == value:
                 return count
@@ -312,6 +313,7 @@ class BinarySearchTree:
         if node is None:
             return -1
 
+        # search both sides of tree to find just how big it is
         left_height = self.height(node.left)
         right_height = self.height(node.right)
         return 1 + max(left_height, right_height)
@@ -323,6 +325,7 @@ class BinarySearchTree:
         :return: Node - Minimum Node
         """
 
+        # just keep going left until you cant go anymore
         if node is None or node.left is None:
             return node
         else:
@@ -335,6 +338,7 @@ class BinarySearchTree:
         :return: Node - Maximum Node
         """
 
+        # just keep going right until you cant go anymore
         if node is None or node.right is None:
             return node
         else:
@@ -349,6 +353,11 @@ class BinarySearchTree:
         return self.size
 
     def is_perfect(self, node):
+        """
+        bool for if tree is perfect or not (size == (2^h)-1)
+        :param node: root node to start at
+        :return: bool - is_perfect or not
+        """
 
         # empty tree
         if node is None:
@@ -365,28 +374,12 @@ class BinarySearchTree:
         return False
 
     def is_degenerate(self):
+        """
+        returns if tree is basically a linked list (all nodes have only one child)
+        :return: bool, if is degenerate
+        """
 
         if self.is_perfect(self.root):
             return False
         # degenerate if number of elements is height + 1
         return self.size == self.height(self.root) + 1
-
-
-def main():
-    bst = BinarySearchTree()
-
-    bst.insert(10)
-    bst.insert(8)
-    bst.insert(12)
-    bst.insert(7)
-    bst.insert(9)
-    bst.insert(11)
-    bst.insert(13)
-
-    bst.remove(12)
-
-    print('done')
-
-
-if __name__ == '__main__':
-    main()
