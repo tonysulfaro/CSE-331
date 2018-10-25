@@ -150,8 +150,10 @@ class BinarySearchTree:
                 elif cur.left and not cur.right:  # remove one left child
                     if not par:  # node is root:
                         self.root = cur.left
+                        cur.left.parent = None
                     elif par.left == cur:
                         par.left = cur.left
+                        cur.left.parent = par
                     else:
                         par.right = cur.left
                         cur.left.parent = par
@@ -159,8 +161,10 @@ class BinarySearchTree:
                 elif not cur.left and cur.right:  # Remove node with only right child
                     if not par:  # node is root
                         self.root = cur.right
+                        cur.right.parent = None
                     elif par.left == cur:
                         par.left = cur.right
+                        cur.right.parent = par
                     else:
                         par.right = cur.right
                         cur.right.parent = par
@@ -168,14 +172,28 @@ class BinarySearchTree:
                 else:  # Remove node with two children
                     # Find successor (leftmost child of right subtree)
                     suc = self.min(cur.right)
+                    self.remove(suc.value)
                     successorData = Node(suc.value, None)
-                    successorData.left = self.root.left
-                    successorData.right = self.root.right
-                    suc.parent.left = None
+                    successorData.left = cur.left
+                    successorData.right = cur.right
+                    successorData.parent = par
+
+                    # Assign children of new node to new parent
+                    if successorData.left is not None:
+                        successorData.left.parent = successorData
+                    if successorData.right is not None:
+                        successorData.right.parent = successorData
+
                     # Assign cur's data with successorData
-                    self.root = successorData
-                    self.root.right.parent = self.root
-                    self.root.left.parent = self.root
+                    if cur.parent is not None:
+                        if cur.parent.left == cur:
+                            cur.parent.left = successorData
+                        if cur.parent.right == cur:
+                            cur.parent.right = successorData
+                    cur = successorData
+
+                    if cur.parent is None:
+                        self.root = successorData
 
                 self.size -= 1
                 return  # Node found and removed
@@ -197,21 +215,6 @@ class BinarySearchTree:
         :param node: Node from which to complete the search (doesn't have to be the absolute root)
         :return: node - found node or potential parent node if not found
         """
-
-        # if value == node.value:
-        #     return Node(node.value, node.parent, node.left, node.right)
-        #
-        # elif value < node.value:
-        #     if node.left is None:
-        #         return Node(node.value, node.parent, node.left, node.right)
-        #     else:
-        #         return self.search(value, node.left)
-        #
-        # elif value > node.value:
-        #     if node.right is None:
-        #         return Node(node.value, node.parent, node.left, node.right)
-        #     else:
-        #         return self.search(value, node.right)
 
         if node.value == value:
             return node
@@ -280,6 +283,8 @@ class BinarySearchTree:
             return -1
 
         node = self.search(value, self.root)
+        if node.value != value:
+            return -1
 
         node_height = self.height(node)
         root_height = self.height(self.root)
@@ -336,8 +341,8 @@ class BinarySearchTree:
         pass
 
     def is_degenerate(self):
-
-        pass
+        # if size == height+1
+        return self.size == self.height(self.root) + 1
 
 
 def main():

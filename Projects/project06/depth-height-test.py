@@ -23,7 +23,7 @@ assert bst.height(bst.root.left) == 1
 
 tree = stu()
 
-assert tree.height() == -1
+assert tree.height(tree.root) == -1
 
 tree.insert(1)
 tree.insert(2)
@@ -33,4 +33,5 @@ tree.insert(5)
 
 print(tree.height(tree.root))
 print(tree.depth(3))
+print(tree.depth(6))
 
