@@ -105,23 +105,25 @@ class BinarySearchTree:
             self.root = new_node
         else:
             cur = self.root
-            while cur is not None:
+            while cur is not None:  # iterate through to find where to put new node
                 if new_node.value == cur.value:
                     return
-                if new_node.value < cur.value:
+                if new_node.value < cur.value:  # search left side of tree to insert
                     if cur.left is None:
+                        # set new node attributes
                         new_node.parent = cur
                         cur.left = new_node
                         cur = None
                     else:
-                        cur = cur.left
-                else:
+                        cur = cur.left  # keep searching right side
+                else:  # search right side of tree to insert
                     if cur.right is None:
+                        # set new node attributes
                         new_node.parent = cur
                         cur.right = new_node
                         cur = None
                     else:
-                        cur = cur.right
+                        cur = cur.right  # keep searching right side
 
         self.size += 1
 
@@ -176,18 +178,27 @@ class BinarySearchTree:
 
                     self.size += 1
 
-                    suc.left = cur.left
-                    suc.right = cur.right
-                    suc.parent = cur.parent
+                    successorData = Node(suc.value, None)
+                    successorData.left = cur.left
+                    successorData.right = cur.right
+                    successorData.parent = par
 
-                    if cur.left is not None:
-                        cur.left.parent = suc
-                    if cur.right is not None:
-                        cur.right.parent = suc
+                    # Assign children of new node to new parent
+                    if successorData.left is not None:
+                        successorData.left.parent = successorData
+                    if successorData.right is not None:
+                        successorData.right.parent = successorData
+
+                    # Assign cur's data with successorData
+                    if cur.parent is not None:
+                        if cur.parent.left == cur:
+                            cur.parent.left = successorData
+                        if cur.parent.right == cur:
+                            cur.parent.right = successorData
+                    cur = successorData
 
                     if cur.parent is None:
-                        self.root = suc
-                    cur = suc
+                        self.root = successorData
 
                 self.size -= 1
                 return  # Node found and removed
@@ -357,6 +368,7 @@ class BinarySearchTree:
 
         if self.is_perfect(self.root):
             return False
+        # degenerate if number of elements is height + 1
         return self.size == self.height(self.root) + 1
 
 
