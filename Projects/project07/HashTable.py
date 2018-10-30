@@ -61,6 +61,12 @@ class HashTable:
         return hashed_value % self.capacity
 
     def insert(self, key, value):
+        """
+        Insert new key,vale pair into map as a node instance
+        :param key: Key of node to insert as
+        :param value: Value of node
+        :return: Bool - Successful insert or not
+        """
 
         if key == '':
             return False
@@ -69,30 +75,48 @@ class HashTable:
             self.grow()
 
         new_node = HashNode(key, value)
+        bucket = self.quadratic_probe(key)
+
+        if bucket is None:
+            return False
+
+        if self.table[bucket] is not None and self.table[bucket].key == key:
+            self.table[bucket].value = value
+            return
+
+        self.table[bucket] = new_node
+        self.size += 1
+
+    def quadratic_probe(self, key):
 
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
-        while buckets_probed < len(self.table):
+        while buckets_probed <= len(self.table):
             # if the bucket is empty, the item can be inserted at that index.
             if self.table[bucket] is None:
-                self.table[bucket] = new_node
-                self.size += 1
-                return True
+                return bucket
+
+            if self.table[bucket].key == key:
+                return bucket
 
             # the bucket was occupied, continue probing to next index in table.
             bucket = (bucket + buckets_probed ** 2) % len(self.table)
             buckets_probed = buckets_probed + 1
 
-        # the entire table was full and the key could not be inserted.
-        return False
-
-    def quadratic_probe(self, key):
-        pass
-
     def find(self, key):
+        """
+        find node and return it if it exists, False if DNE
+        :param key: key to search map for
+        :return: node - if key found, False (bool) - if key not found
+        """
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
         while buckets_probed < len(self.table):
+            if self.table[bucket] is None:
+                buckets_probed += 1
+                continue
+            if buckets_probed == self.capacity:
+                return False
             if self.table[bucket].key == key:
                 return self.table[bucket]
 
@@ -104,7 +128,11 @@ class HashTable:
         return False
 
     def lookup(self, key):
-        pass
+        searched = self.find(key)
+
+        if searched is False:
+            return searched
+        return searched.value
 
     def delete(self, key):
         pass
@@ -115,12 +143,7 @@ class HashTable:
 
         for item in self.table:
             if item is not None:
-                bucket = self.hash_function(item.key) % len(temp_table)
-
-                buckets_probed = 0
-                while temp_table[bucket] is not None:
-                    bucket = (self.hash_function(item.key) + self.c1 * buckets_probed + self.c2 * buckets_probed * buckets_probed) % len(self.table)
-                    buckets_probed += 1
+                bucket = self.quadratic_probe(item.key)
                 temp_table[bucket] = item
 
         self.table = temp_table
@@ -141,6 +164,7 @@ def main():
     print(table.size)
 
     print(table.find('tony'))
+    print(table.find('not found'))
 
 
 if __name__ == '__main__':
