@@ -61,13 +61,47 @@ class HashTable:
         return hashed_value % self.capacity
 
     def insert(self, key, value):
-        pass
+
+        if key == '':
+            return False
+
+        if self.size / self.capacity >= 0.75:
+            self.grow()
+
+        new_node = HashNode(key, value)
+
+        bucket = self.hash_function(key) % len(self.table)
+        buckets_probed = 0
+        while buckets_probed < len(self.table):
+            # if the bucket is empty, the item can be inserted at that index.
+            if self.table[bucket] is None:
+                self.table[bucket] = new_node
+                self.size += 1
+                return True
+
+            # the bucket was occupied, continue probing to next index in table.
+            bucket = (bucket + buckets_probed ** 2) % len(self.table)
+            buckets_probed = buckets_probed + 1
+
+        # the entire table was full and the key could not be inserted.
+        return False
 
     def quadratic_probe(self, key):
         pass
 
     def find(self, key):
-        pass
+        bucket = self.hash_function(key) % len(self.table)
+        buckets_probed = 0
+        while buckets_probed < len(self.table):
+            if self.table[bucket].key == key:
+                return self.table[bucket]
+
+            # the bucket was occupied (now or previously), so continue probing.
+            bucket = (bucket + 1) % len(self.table)
+            buckets_probed = buckets_probed + 1
+
+        # the entire table was probed or an empty cell was found.
+        return False
 
     def lookup(self, key):
         pass
@@ -76,7 +110,20 @@ class HashTable:
         pass
 
     def grow(self):
-        pass
+
+        temp_table = [None] * (self.capacity * 2)
+
+        for item in self.table:
+            if item is not None:
+                bucket = self.hash_function(item.key) % len(temp_table)
+
+                buckets_probed = 0
+                while temp_table[bucket] is not None:
+                    bucket = (self.hash_function(item.key) + self.c1 * buckets_probed + self.c2 * buckets_probed * buckets_probed) % len(self.table)
+                    buckets_probed += 1
+                temp_table[bucket] = item
+
+        self.table = temp_table
 
     def rehash(self):
         pass
@@ -84,3 +131,17 @@ class HashTable:
 
 def string_difference(string1, string2):
     pass
+
+
+def main():
+    table = HashTable(10)
+    table.insert('tony', 20)
+    table.insert('jim bob', 30)
+    table.insert('tony', 50)
+    print(table.size)
+
+    print(table.find('tony'))
+
+
+if __name__ == '__main__':
+    main()
