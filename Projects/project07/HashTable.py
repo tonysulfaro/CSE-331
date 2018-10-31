@@ -92,6 +92,11 @@ class HashTable:
         :param key: key to search for
         :return: int - index of where to put item in table
         """
+        if not key:
+            return -1
+        if key == '':
+            return
+
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
         while buckets_probed <= len(self.table):
@@ -103,7 +108,7 @@ class HashTable:
                 return bucket
 
             # the bucket was occupied, continue probing to next index in table.
-            bucket = (bucket + buckets_probed ** 2) % len(self.table)
+            bucket = (bucket + buckets_probed ** 2) % self.capacity
             buckets_probed = buckets_probed + 1
 
     def find(self, key):
