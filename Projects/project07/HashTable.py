@@ -67,11 +67,10 @@ class HashTable:
         :param value: Value of node
         :return: Bool - Successful insert or not
         """
-
         if key == '':
             return False
 
-        if self.size / self.capacity >= 0.75:
+        if self.size / self.capacity > 0.75:
             self.grow()
 
         new_node = HashNode(key, value)
@@ -88,7 +87,11 @@ class HashTable:
         self.size += 1
 
     def quadratic_probe(self, key):
-
+        """
+        finds index of where to insert next item based on key
+        :param key: key to search for
+        :return: int - index of where to put item in table
+        """
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
         while buckets_probed <= len(self.table):
@@ -128,6 +131,11 @@ class HashTable:
         return False
 
     def lookup(self, key):
+        """
+        find key value pair and return value of node
+        :param key: key to search for
+        :return: value of node
+        """
         searched = self.find(key)
 
         if searched is False:
@@ -135,11 +143,25 @@ class HashTable:
         return searched.value
 
     def delete(self, key):
-        pass
+        """
+        remove node from table
+        :param key: key to remove from table
+        :return: no return
+        """
+        node_location = self.quadratic_probe(key)
+
+        if key is not None:
+            self.table[node_location] = None
 
     def grow(self):
+        """
+        double table capacity
+        :return: no return
+        """
+        self.table += ([None] * self.capacity)
+        self.capacity *= 2
 
-        temp_table = [None] * (self.capacity * 2)
+        temp_table = [None] * self.capacity
 
         for item in self.table:
             if item is not None:
@@ -149,14 +171,29 @@ class HashTable:
         self.table = temp_table
 
     def rehash(self):
+        """
+        rehashes all items inside the table
+        :return: no return
+        """
         pass
 
 
 def string_difference(string1, string2):
-    pass
+    """
+    return set difference between two strings using HashTables
+    :param string1: first string to compare
+    :param string2: second string to compare
+    :return: set difference if applicable of strings
+    """
+    if string1 == string2:
+        return set()
 
 
 def main():
+    """
+    main method, not much to see here
+    :return: no return
+    """
     table = HashTable(10)
     table.insert('tony', 20)
     table.insert('jim bob', 30)
@@ -165,6 +202,8 @@ def main():
 
     print(table.find('tony'))
     print(table.find('not found'))
+    table.delete('tony')
+    print(table.find('tony'))
 
 
 if __name__ == '__main__':
