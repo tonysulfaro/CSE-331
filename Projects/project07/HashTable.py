@@ -166,14 +166,13 @@ class HashTable:
         self.table += ([None] * self.capacity)
         self.capacity *= 2
 
-        temp_table = [None] * self.capacity
+        temp_table = self.table
+        self.table = [None] * self.capacity
 
-        for item in self.table:
+        for item in temp_table:
             if item is not None:
                 bucket = self.quadratic_probe(item.key)
-                temp_table[bucket] = item
-
-        self.table = temp_table
+                self.table[bucket] = item
 
     def rehash(self):
         """
@@ -190,8 +189,28 @@ def string_difference(string1, string2):
     :param string2: second string to compare
     :return: set difference if applicable of strings
     """
-    if string1 == string2:
-        return set()
+    hash_map = HashTable()
+    result_set = set()
+
+    for char in string1:
+        find = hash_map.find(char)
+        if find is False:
+            hash_map.insert(char, 1)
+        else:
+            hash_map.insert(find.key, find.value + 1)
+
+    for char in string2:
+        find = hash_map.find(char)
+        if find is False:
+            hash_map.insert(char, 1)
+        else:
+            hash_map.insert(find.key, find.value - 1)
+
+    for item in hash_map.table:
+        if item is not None and int(item.value) > 0:
+            result_set.add(item.key*int(item.value))
+
+    return result_set
 
 
 def main():
@@ -199,16 +218,22 @@ def main():
     main method, not much to see here
     :return: no return
     """
-    table = HashTable(10)
-    table.insert('tony', 20)
-    table.insert('jim bob', 30)
-    table.insert('tony', 50)
-    print(table.size)
+    string1 = "aabbcc"
+    string2 = "ab"
 
-    print(table.find('tony'))
-    print(table.find('not found'))
-    table.delete('tony')
-    print(table.find('tony'))
+    diff = string_difference(string1, string2)
+    print(diff)
+
+    assert diff == set(['a', 'b', 'cc'])
+
+    string2 = ''
+    diff = string_difference(string1, string2)
+    print(diff)
+
+    blu = set(['b', 'l', 'u', 'e'])
+    gre = set(['g', 'r', 'e', 'e', 'n', 'e'])
+
+    print(blu-gre)
 
 
 if __name__ == '__main__':
