@@ -67,22 +67,27 @@ class HashTable:
         :param value: Value of node
         :return: Bool - Successful insert or not
         """
+        # cannot insert empty string
         if key == '':
             return False
 
+        # check load factor to grow
         if self.size / self.capacity > 0.75:
             self.grow()
 
+        # initialize node and where its going
         new_node = HashNode(key, value)
         bucket = self.quadratic_probe(key)
 
         if bucket is None:
             return False
 
+        # update existing node value of same key
         if self.table[bucket] is not None and self.table[bucket].key == key:
             self.table[bucket].value = value
             return
 
+        # put new node in
         self.table[bucket] = new_node
         self.size += 1
 
@@ -92,11 +97,13 @@ class HashTable:
         :param key: key to search for
         :return: int - index of where to put item in table
         """
+        # error handling
         if not key:
             return -1
         if key == '':
             return
 
+        # hash out starting bucket
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
         while buckets_probed <= len(self.table):
@@ -104,6 +111,7 @@ class HashTable:
             if self.table[bucket] is None:
                 return bucket
 
+            # update existing item
             if self.table[bucket].key == key:
                 return bucket
 
@@ -117,14 +125,20 @@ class HashTable:
         :param key: key to search map for
         :return: node - if key found, False (bool) - if key not found
         """
+        # find hash and start probing there
         bucket = self.hash_function(key) % len(self.table)
         buckets_probed = 0
+
+        # iterate through n elements as worst case
         while buckets_probed < len(self.table):
+            # not found
             if self.table[bucket] is None:
                 buckets_probed += 1
                 continue
+            # not in there at all
             if buckets_probed == self.capacity:
                 return False
+            # found
             if self.table[bucket].key == key:
                 return self.table[bucket]
 
@@ -143,6 +157,7 @@ class HashTable:
         """
         searched = self.find(key)
 
+        # return value of found node
         if searched is False:
             return searched
         return searched.value
@@ -153,10 +168,16 @@ class HashTable:
         :param key: key to remove from table
         :return: no return
         """
-        node_location = self.quadratic_probe(key)
+        node_location = self.hash_function(key) % len(self.table)
 
-        if key is not None:
+        # try to delete it right at the key
+        if key is not None and key == self.table[node_location].key:
             self.table[node_location] = None
+
+        # didn't find it based on hash time to iterate through linearly
+        for x in range(self.capacity):
+            if self.table[x] is not None and self.table[x].key == key:
+                self.table[x] = None
 
     def grow(self):
         """
@@ -165,21 +186,22 @@ class HashTable:
         """
         self.table += ([None] * self.capacity)
         self.capacity *= 2
-
-        temp_table = self.table
-        self.table = [None] * self.capacity
-
-        for item in temp_table:
-            if item is not None:
-                bucket = self.quadratic_probe(item.key)
-                self.table[bucket] = item
+        self.rehash()
 
     def rehash(self):
         """
         rehashes all items inside the table
         :return: no return
         """
-        pass
+        # initialize temp table
+        temp_table = self.table
+        self.table = [None] * self.capacity
+
+        # iterate through items and rehash to new positions
+        for item in temp_table:
+            if item is not None:
+                bucket = self.quadratic_probe(item.key)
+                self.table[bucket] = item
 
 
 def string_difference(string1, string2):
@@ -192,6 +214,7 @@ def string_difference(string1, string2):
     hash_map = HashTable()
     result_set = set()
 
+    # add chars in from string 1
     for char in string1:
         find = hash_map.find(char)
         if find is False:
@@ -199,6 +222,7 @@ def string_difference(string1, string2):
         else:
             hash_map.insert(find.key, find.value + 1)
 
+    # add in new chars and subtract existing ones to get diff
     for char in string2:
         find = hash_map.find(char)
         if find is False:
@@ -206,9 +230,10 @@ def string_difference(string1, string2):
         else:
             hash_map.insert(find.key, find.value - 1)
 
+    # get new set and return it
     for item in hash_map.table:
         if item is not None and int(item.value) > 0:
-            result_set.add(item.key*int(item.value))
+            result_set.add(item.key * int(item.value))
 
     return result_set
 
@@ -221,19 +246,17 @@ def main():
     string1 = "aabbcc"
     string2 = "ab"
 
+    string1 = ""
+    string2 = "ab"
+
     diff = string_difference(string1, string2)
     print(diff)
 
-    assert diff == set(['a', 'b', 'cc'])
+    # assert diff == set(['a', 'b', 'cc'])
 
     string2 = ''
     diff = string_difference(string1, string2)
     print(diff)
-
-    blu = set(['b', 'l', 'u', 'e'])
-    gre = set(['g', 'r', 'e', 'e', 'n', 'e'])
-
-    print(blu-gre)
 
 
 if __name__ == '__main__':
