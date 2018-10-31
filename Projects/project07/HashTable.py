@@ -168,16 +168,30 @@ class HashTable:
         :param key: key to remove from table
         :return: no return
         """
-        node_location = self.hash_function(key) % len(self.table)
+        # error handling
+        if not key or key == '':
+            return
 
-        # try to delete it right at the key
-        if key is not None and key == self.table[node_location].key:
-            self.table[node_location] = None
+        bucket = self.hash_function(key) % len(self.table)
 
-        # didn't find it based on hash time to iterate through linearly
-        for x in range(self.capacity):
-            if self.table[x] is not None and self.table[x].key == key:
-                self.table[x] = None
+        # iterate through n elements as worst case
+        buckets_probed = 0
+        while buckets_probed < len(self.table):
+            # not found
+            if self.table[bucket] is None:
+                buckets_probed += 1
+                continue
+            # not in there at all
+            if buckets_probed == self.capacity:
+                return False
+            # found
+            if self.table[bucket].key == key:
+                self.table[bucket] = None
+                self.size -= 1
+
+            # the bucket was occupied (now or previously), so continue probing.
+            bucket = (bucket + buckets_probed ** 2) % self.capacity
+            buckets_probed = buckets_probed + 1
 
     def grow(self):
         """
@@ -211,6 +225,9 @@ def string_difference(string1, string2):
     :param string2: second string to compare
     :return: set difference if applicable of strings
     """
+    if string2 is None or string1 is None:
+        return
+
     hash_map = HashTable()
     result_set = set()
 
@@ -243,20 +260,11 @@ def main():
     main method, not much to see here
     :return: no return
     """
-    string1 = "aabbcc"
-    string2 = "ab"
-
-    string1 = ""
-    string2 = "ab"
-
-    diff = string_difference(string1, string2)
-    print(diff)
-
-    # assert diff == set(['a', 'b', 'cc'])
-
-    string2 = ''
-    diff = string_difference(string1, string2)
-    print(diff)
+    hashmap = HashTable()
+    hashmap.delete(0)
+    hashmap.delete(None)
+    hashmap.delete('test')
+    hashmap.delete('')
 
 
 if __name__ == '__main__':

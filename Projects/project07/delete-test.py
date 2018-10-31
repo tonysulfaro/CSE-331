@@ -19,6 +19,8 @@ ht.insert("five", 5)
 ht.delete("abc")
 ht.delete("test")
 ht.delete("five")
+ht.delete(None)
+ht.delete(0)
 
 assertNode(ht.table[0], "word", 2)
 assertNode(ht.table[1], None, None)
