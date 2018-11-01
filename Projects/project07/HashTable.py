@@ -143,7 +143,7 @@ class HashTable:
                 return self.table[bucket]
 
             # the bucket was occupied (now or previously), so continue probing.
-            bucket = (bucket + 1) % len(self.table)
+            bucket = (bucket + buckets_probed ** 2) % self.capacity
             buckets_probed = buckets_probed + 1
 
         # the entire table was probed or an empty cell was found.
@@ -228,29 +228,44 @@ def string_difference(string1, string2):
     if string2 is None or string1 is None:
         return
 
-    hash_map = HashTable()
+    hash_map1 = HashTable(100)
+    hash_map2 = HashTable(100)
     result_set = set()
 
     # add chars in from string 1
     for char in string1:
-        find = hash_map.find(char)
-        if find is False:
-            hash_map.insert(char, 1)
-        else:
-            hash_map.insert(find.key, find.value + 1)
+        find = hash_map1.find(char)  # constant find from hash
+        if find is False:  # not in map, add
+            hash_map1.insert(char, 1)
+        else:  # already in map, increment count
+            hash_map1.insert(find.key, find.value + 1)
 
-    # add in new chars and subtract existing ones to get diff
+    # add chars from string 2
     for char in string2:
-        find = hash_map.find(char)
-        if find is False:
-            hash_map.insert(char, 1)
-        else:
-            hash_map.insert(find.key, find.value - 1)
+        find = hash_map2.find(char)  # constant find from hash
+        if find is False:  # not in map yet
+            hash_map2.insert(char, 1)
+        else:  # already in map, increment count
+            hash_map2.insert(find.key, find.value + 1)
 
-    # get new set and return it
-    for item in hash_map.table:
-        if item is not None and int(item.value) != 0:
-            result_set.add(item.key * abs(int(item.value)))
+    # iterate through both hashmaps and generate difference set
+    for x in range(hash_map1.capacity):
+
+        node1 = hash_map1.table[x]
+        node2 = hash_map2.table[x]
+
+        if node1 or node2:  # there is a char to add
+            if not node1:  # only one to add, no diff
+                result_set.add(node2.key * int(node2.value))
+                continue
+            if not node2:  # only one to add, no diff
+                result_set.add(node1.key * int(node1.value))
+                continue
+
+            # get diff of char count and add to set
+            count_diff = abs(node1.value - node2.value)
+            if count_diff > 0:
+                result_set.add(node1.key * count_diff)
 
     return result_set
 
