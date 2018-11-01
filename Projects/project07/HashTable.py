@@ -249,8 +249,8 @@ def string_difference(string1, string2):
 
     # get new set and return it
     for item in hash_map.table:
-        if item is not None and int(item.value) > 0:
-            result_set.add(item.key * int(item.value))
+        if item is not None and int(item.value) != 0:
+            result_set.add(item.key * abs(int(item.value)))
 
     return result_set
 
@@ -260,11 +260,7 @@ def main():
     main method, not much to see here
     :return: no return
     """
-    hashmap = HashTable()
-    hashmap.delete(0)
-    hashmap.delete(None)
-    hashmap.delete('test')
-    hashmap.delete('')
+    print(string_difference('mississippi', 'mrpaninis'))  # should be --> {'a', 'nn', 'r', 'p', 'sss', 'ii'}
 
 
 if __name__ == '__main__':
