@@ -1,5 +1,5 @@
-from .priority_queue_base import PriorityQueueBase
-from .exceptions import Empty
+from priority_queue_base import PriorityQueueBase
+from exceptions import Empty
 
 
 class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
@@ -9,15 +9,15 @@ class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
 
     def _parent(self, j):
         # find parent index
-        pass
+        return (j - 1) // 2
 
     def _left(self, j):
         # find left index
-        pass
+        return 2 * j + 1
 
     def _right(self, j):
         # find right index
-        pass
+        return 2 * j + 2
 
     def _has_left(self, j):
         return self._left(j) < len(self._data)  # index beyond end of list?
@@ -30,10 +30,25 @@ class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
         self._data[i], self._data[j] = self._data[j], self._data[i]
 
     def _upheap(self, j):
-        pass
+
+        parent = self._parent(j)
+        if j > 0 and self._data[j] < self._data[parent]:
+            self._swap(j, parent)
+            self._upheap(parent)
 
     def _downheap(self, j):
-        pass
+
+        if self._has_left(j):
+            left = self._left(j)
+            small_child = left
+            if self._has_right(j):
+                right = self._right(j)
+                if self._data[right] < self._data[left]:
+                    small_child = right
+
+            if self._data[small_child] < self._data[j]:
+                self._swap(j, small_child)
+                self._downheap(small_child)
 
     # ------------------------------ public behaviors ------------------------------
     def __init__(self):
@@ -46,8 +61,10 @@ class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
 
     def add(self, key, value):
         """Add a key-value pair to the priority queue."""
-        # self._data.append(self._Item(key, value))
-        pass  # upheap newly added position
+
+        # upheap newly added position
+        self._data.append(self._Item(key, value))
+        self._upheap(len(self._data) - 1)
 
     # <editor-fold desc="Return but do not remove (k,v) tuple with minimum key">
     # </editor-fold>
@@ -57,9 +74,9 @@ class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
         Raise Empty exception if empty.
         """
         if self.is_empty():
-            raise Empty('Priority queue is empty.')
+            raise Empty('queue empty')
         item = self._data[0]
-        return (item._key, item._value)
+        return item._key, item._value
 
     # <editor-fold desc="Remove and return (k,v) tuple with minimum key.Raise Empty exception if empty">
     # </editor-fold>
@@ -70,9 +87,17 @@ class HeapPriorityQueue(PriorityQueueBase):  # base class defines _Item
         """
         if self.is_empty():
             raise Empty('Priority queue is empty.')
-            # put minimum item at the end
-            # and remove it from the list;
-            # then fix new root
+
+        # put minimum item at the end
+        self._swap(0, len(self._data) - 1)
+
+        # and remove it from the list;
+        item = self._data.pop()
+
+        # then fix new root
+        self._downheap(0)
+
+        return item._key, item._value
 
 
 pqueu = HeapPriorityQueue()

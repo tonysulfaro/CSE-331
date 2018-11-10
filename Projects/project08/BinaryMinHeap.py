@@ -1,7 +1,8 @@
 ########################################
 # PROJECT: Binary Min Heap and Sort
-# Author:
+# Author: Tony Sulfaro
 ########################################
+
 
 class BinaryMinHeap:
     # DO NOT MODIFY THIS CLASS #
@@ -10,7 +11,6 @@ class BinaryMinHeap:
         Creates an empty hash table with a fixed capacity
         """
         self.table = []
-
 
     def __eq__(self, other):
         """
