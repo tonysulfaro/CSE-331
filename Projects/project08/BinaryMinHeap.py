@@ -32,28 +32,32 @@ class BinaryMinHeap:
         pass
 
     def get_size(self):
-        pass
+        return len(self.table)
 
     def parent(self, position):
-        pass
+        return (position - 1) // 2
 
     def left_child(self, position):
-        pass
+        return 2 * position + 1
 
     def right_child(self, position):
-        pass
+        return 2 * position + 2
 
     def has_left(self, position):
-        pass
+        return self.left_child(position) is not None
 
     def has_right(self, position):
-        pass
+        return self.right_child(position) is not None
 
     def find(self, value):
-        pass
+        for x in range(len(self.table)):
+            if self.table[x] == value:
+                return x
 
     def heap_push(self, value):
-        pass
+        if self.find(value) is None:
+            self.table.append(value)
+            self.percolate_up(len(self.table) - 1)
 
     def heap_pop(self, value):
         pass
@@ -62,13 +66,28 @@ class BinaryMinHeap:
         pass
 
     def swap(self, p1, p2):
-        pass
+        self.table[p1], self.table[p2] = self.table[p2], self.table[p1]
 
     def percolate_up(self, position):
-        pass
+
+        parent = self.parent(position)
+        if position > 0 and self.table[position] < self.table[parent]:
+            self.swap(position, parent)
+            self.percolate_up(parent)
 
     def percolate_down(self, position):
-        pass
+
+        if self.has_left(position):
+            left = self.left_child(position)
+            small_child = left
+            if self.has_right(position):
+                right = self.right_child(position)
+                if self.table[right] < self.table[left]:
+                    small_child = right
+
+            if self.table[small_child] < self.table[position]:
+                self.swap(position, small_child)
+                self.percolate_down(small_child)
 
 
 def heap_sort(unsorted):
