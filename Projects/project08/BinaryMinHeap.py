@@ -54,7 +54,7 @@ class BinaryMinHeap:
         """
         child = 2 * position + 1
         if child > len(self.table) - 1:
-            return
+            return None
         return child
 
     def right_child(self, position):
@@ -65,7 +65,7 @@ class BinaryMinHeap:
         """
         child = 2 * position + 2
         if child > len(self.table) - 1:
-            return
+            return None
         return child
 
     def has_left(self, position):
@@ -90,9 +90,9 @@ class BinaryMinHeap:
         :param value: integer - value to search for
         :return: integer - item index
         """
-        for x in range(len(self.table)):
-            if self.table[x] == value:
-                return x
+        for position in range(len(self.table)):
+            if self.table[position] == value:
+                return position
 
     def heap_push(self, value):
         """
@@ -110,32 +110,19 @@ class BinaryMinHeap:
         :param value: value to remove from heap
         :return: no return
         """
-        for x in range(len(self.table)):
-            if self.table[x] == value:
+        if value is None or len(self.table) == 0:
+            return
 
-                # child positions
-                left = self.left_child(x)
-                right = self.right_child(x)
+        for position in range(len(self.table)):
+            if self.table[position] == value:
 
-                if self.has_left(x) and self.has_right(x):  # choose lesser child to promote
-                    if self.left_child(x) < self.right_child(x):
-                        self.swap(x, left)
-                        self.table.pop(left)
-                        return
-                    self.table[x] = right
-                    self.table.pop(right)
-                    return
-                if self.has_right(x):  # promote right child
-                    self.swap(x, right)
-                    self.table.pop(right)
-                    return
-                if self.has_left(x):  # promote left child
-                    self.swap(x, left)
-                    self.table.pop(left)
-                    return
+                # end of list
+                last = len(self.table) - 1
 
-                # remove node with no children
-                self.table.pop(x)
+                # pop element and percolate down
+                self.swap(position, last)
+                self.table.pop()
+                self.percolate_down(position)
                 return
 
     def pop_min(self):
@@ -144,7 +131,7 @@ class BinaryMinHeap:
         :return: item popped from heap
         """
         if self.get_size() == 0:
-            return
+            return None
 
         # put minimum item at the end
         self.swap(0, len(self.table) - 1)
@@ -207,11 +194,6 @@ def heap_sort(unsorted):
     for item in unsorted:
         heap.heap_push(item)
 
-    for x in range(len(heap.table)):
+    for position in range(len(heap.table)):
         sorted_list.append(heap.pop_min())
     return sorted_list
-
-
-unsort = [44, 5, 2, 1, 11, 57, 345, 2, 4]
-print(unsort)
-print(heap_sort(unsort))
