@@ -49,3 +49,14 @@ def BFS_complete(g):
       forest[u] = None            # u will be a root of a tree
       BFS(g, u, forest)
   return forest
+
+
+if __name__ == '__main__':
+  #from graph_examples import figure_14_11 as example
+  from graph_examples import figure_14_9_smaller as example
+  #from graph_examples import figure_14_12_smaller as example
+  g = example()
+  print("Number of vertices is", g.vertex_count())
+  print("Number of edges is", g.edge_count())
+  bfs = BFS_complete(g)
+  print("BFS", [str(v) for v in bfs])

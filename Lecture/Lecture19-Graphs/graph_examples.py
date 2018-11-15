@@ -65,6 +65,13 @@ def figure_14_9():
 
 figure_14_10 = figure_14_9   # same graph
 
+def figure_14_9_smaller():
+  E = (
+    ('A', 'B'), ('A', 'E'), ('A', 'F'), ('B', 'C'), ('B', 'F'),
+    ('C', 'D'), ('C', 'G'), ('D', 'G'), ('D', 'H'), ('E', 'F'),
+
+  )
+  return graph_from_edgelist(E, False)
 def figure_14_11():
   """Return the unweighted, directed graph from Figure 14.11 of DSAP."""
   E = (
@@ -84,6 +91,13 @@ def figure_14_12():
     ('A','C'), ('A','D'), ('B','D'), ('B', 'F'), ('C','D'), ('C','E'),
     ('C','H'), ('D','F'), ('E','G'), ('F','G'), ('F','H'), ('G','H')
     )
+  return graph_from_edgelist(E, True)
+
+def figure_14_12_smaller():
+  E = (
+    ('A', 'C'), ('A', 'D'), ('B', 'D'), ('B', 'F'), ('C', 'D'), ('C', 'E'),
+     ('D', 'F'),
+  )
   return graph_from_edgelist(E, True)
 
 figure_14_13 = figure_14_12   # same graph
@@ -116,3 +130,22 @@ def figure_14_15():
   return graph_from_edgelist(E, False)
 
 
+if __name__ == '__main__':
+
+   #g=figure_14_9_smaller()
+   #g=figure_14_9()
+   #g =   figure_14_12()
+   g=figure_14_12_smaller()
+
+   vertex_count=g.vertex_count()
+   edge_count=g.edge_count()
+   degrees = {}  # keep track of in-degree for each vertex
+
+   for u in g.vertices():
+     degrees[u] = g.degree(u, False)  # parameter requests incoming degree
+     print("degree of ", u,"is: " ,degrees[u])
+
+   print("Number of vertices is", g.vertex_count())
+   print("Number of edges is", g.edge_count())
+  #topo = topological_sort(g)
+  #print("Topo order", [str(v) for v in topo])

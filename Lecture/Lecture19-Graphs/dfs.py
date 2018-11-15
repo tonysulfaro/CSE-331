@@ -44,3 +44,14 @@ def DFS_complete(g):
       forest[u] = None             # u will be the root of a tree
       DFS(g, u, forest)
   return forest
+
+
+if __name__ == '__main__':
+  #from graph_examples import figure_14_11 as example
+  from graph_examples import figure_14_9_smaller as example
+  #from graph_examples import figure_14_12_smaller as example
+  g = example()
+  print("Number of vertices is", g.vertex_count())
+  print("Number of edges is", g.edge_count())
+  dfs = DFS_complete(g)
+  print("DFS", [str(v) for v in dfs])

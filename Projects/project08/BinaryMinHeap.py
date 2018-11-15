@@ -90,7 +90,7 @@ class BinaryMinHeap:
         :param value: integer - value to search for
         :return: integer - item index
         """
-        for position in range(len(self.table)):
+        for position in range(self.get_size()):
             if self.table[position] == value:
                 return position
 
@@ -102,7 +102,7 @@ class BinaryMinHeap:
         """
         if self.find(value) is None:
             self.table.append(value)
-            self.percolate_up(len(self.table) - 1)
+            self.percolate_up(self.get_size() - 1)
 
     def heap_pop(self, value):
         """
@@ -110,20 +110,19 @@ class BinaryMinHeap:
         :param value: value to remove from heap
         :return: no return
         """
-        if value is None or len(self.table) == 0:
+        if value is None or self.get_size() == 0:
             return
 
-        for position in range(len(self.table)):
-            if self.table[position] == value:
+        if self.find(value) is not None:
+            # end of list
+            position = self.find(value)
+            last = self.get_size() - 1
 
-                # end of list
-                last = len(self.table) - 1
-
-                # pop element and percolate down
-                self.swap(position, last)
-                self.table.pop()
-                self.percolate_down(position)
-                return
+            # pop element and percolate down
+            self.swap(position, last)
+            self.table.pop()
+            self.percolate_down(position)
+            return
 
     def pop_min(self):
         """
@@ -194,6 +193,6 @@ def heap_sort(unsorted):
     for item in unsorted:
         heap.heap_push(item)
 
-    for position in range(len(heap.table)):
+    for position in range(heap.get_size()):
         sorted_list.append(heap.pop_min())
     return sorted_list
