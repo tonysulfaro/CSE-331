@@ -158,9 +158,9 @@ class BinaryMinHeap:
         :return: no return
         """
         parent = self.parent(position)
-        if position > 0 and self.table[position] < self.table[parent]:
+        if position > 0 and self.table[position] < self.table[parent]:  # not root and child > parent
             self.swap(position, parent)
-            self.percolate_up(parent)
+            self.percolate_up(parent)  # recurse
 
     def percolate_down(self, position):
         """
@@ -169,6 +169,7 @@ class BinaryMinHeap:
         :return: no return
         """
         if self.has_left(position):
+
             left = self.left_child(position)
             small_child = left
             if self.has_right(position):
@@ -176,6 +177,7 @@ class BinaryMinHeap:
                 if self.table[right] < self.table[left]:
                     small_child = right
 
+            # swap smaller element up then do again until it cant go down anymore
             if self.table[small_child] < self.table[position]:
                 self.swap(position, small_child)
                 self.percolate_down(small_child)
@@ -188,11 +190,15 @@ def heap_sort(unsorted):
     :return: sorted_list - sorted list of elements with only UNIQUE items
     """
     heap = BinaryMinHeap()
-    sorted_list = []
 
+    # add items to heap
     for item in unsorted:
         heap.heap_push(item)
 
+    # new list for things to go in
+    sorted_list = [0] * (heap.get_size())
+
+    # add sorted elements
     for position in range(heap.get_size()):
-        sorted_list.append(heap.pop_min())
+        sorted_list[position] = heap.pop_min()
     return sorted_list
