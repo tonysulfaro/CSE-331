@@ -20,6 +20,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from ch09.adaptable_heap_priority_queue import AdaptableHeapPriorityQueue
+from copy import deepcopy
 
 
 def shortest_path_lengths(g, src):
@@ -75,3 +76,16 @@ def shortest_path_tree(g, s, d):
                 if d[v] == d[u] + wgt:
                     tree[v] = e  # edge e is used to reach v
     return tree
+
+
+if __name__ == '__main__':
+    from graph_examples import figure_14_14 as example
+
+    g = example()
+    verts = list(g.vertices())  # make indexable list
+    n = len(verts)
+    spath = shortest_path_lengths(g, verts[0])
+
+    vertex_count = g.vertex_count()
+    print(vertex_count)
+    print([str(v) for v in spath])

@@ -109,6 +109,14 @@ def figure_14_12_smaller():
     return graph_from_edgelist(E, True)
 
 
+def figure_14_12_smaller_wcycle():
+    E = (
+        ('A', 'C'), ('A', 'D'), ('B', 'D'), ('B', 'F'), ('C', 'D'), ('C', 'E'),
+        ('D', 'F'), ('D', 'A'),
+    )
+    return graph_from_edgelist(E, True)
+
+
 figure_14_13 = figure_14_12  # same graph
 
 
@@ -158,5 +166,3 @@ if __name__ == '__main__':
 
     print("Number of vertices is", g.vertex_count())
     print("Number of edges is", g.edge_count())
-# topo = topological_sort(g)
-# print("Topo order", [str(v) for v in topo])

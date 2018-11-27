@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from ..exceptions import Empty
+from ch09.exceptions import Empty
 
 
 class PriorityQueueBase:

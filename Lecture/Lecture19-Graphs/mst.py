@@ -1,4 +1,4 @@
-from ..ch09.pq import HeapPriorityQueue, AdaptableHeapPriorityQueue
+from ch09.pq import HeapPriorityQueue, AdaptableHeapPriorityQueue
 from .partition import Partition
 
 
