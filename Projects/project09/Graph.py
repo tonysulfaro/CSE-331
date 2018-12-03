@@ -60,6 +60,8 @@ class Graph:
             self.vertices.append(vertex)
 
         def remove_vertex(self):
+            if self.is_empty():
+                return None
             self.vertices.pop()
 
         def last_vertex(self):
@@ -181,48 +183,66 @@ class Graph:
 
     def construct_graph(self):
 
-        if self.size <= 0 and self.filename is None:
-            raise GraphError('bad size')
-        if self.connectedness < 0 and self.connectedness >= 1: # has to be > 0 and <= 1
-            raise GraphError('something is wrong with connectedness, whatever that means')
+        def add_new_edge(vertex, adj_vertex):
+
+            new_vertex = self.Vertex(vertex)
+            new_adj_vertex = self.Vertex(adj_vertex)
+
+            # Edge: connects a source (Vertex object) with a destination (Vertex id)
+
+            # both vertex and adj_vertex not in graph
+            if self.get_vertex(vertex) is None and self.get_vertex(adj_vertex) is None:
+                new_vertex.add_edge(adj_vertex)
+                self.adj_list[vertex] = new_vertex  # add new vertex,adj_node to graph
+                self.adj_list[adj_vertex] = new_adj_vertex
+
+            # vertex exists in graph but adj_vertex does not
+            elif self.get_vertex(vertex) and self.get_vertex(adj_vertex) is None:
+                self.adj_list[adj_vertex] = new_adj_vertex
+                self.adj_list[vertex].add_edge(adj_vertex)  # append new edge and adj_node to graph vertex
+
+            # vertex DNE in graph but adj_vertex does
+            elif self.get_vertex(vertex) is None and self.get_vertex(adj_vertex):
+                new_vertex.add_edge(adj_vertex)
+                self.adj_list[vertex] = new_vertex
+
+            # both vertices exist in adj_list
+            elif self.get_vertex(vertex) and self.get_vertex(adj_vertex):
+                vert = self.get_vertex(vertex)
+                test_edge = self.Edge(vert, adj_vertex)
+                if test_edge not in self.adj_list[vertex].edges:
+                    self.adj_list[vertex].edges.append(test_edge)  # add new edge if it DNE
 
         if self.filename:
             # Construct graph from file
             fp = open(self.filename, 'r', encoding='ascii')
-
+            count = 0
             for line in fp:
                 line = line.split()  # [vertex, adjacent-vertex]
 
                 vertex = line[0]
                 adj_vertex = line[1]
-
-                new_vertex = self.Vertex(vertex)
-                new_adj_vertex = self.Vertex(adj_vertex)
-
-                # Edge: connects a source (Vertex object) with a destination (Vertex id)
-
-                if self.get_vertex(vertex) is None and self.get_vertex(adj_vertex) is None:
-                    new_vertex.add_edge(adj_vertex)
-                    self.adj_list[vertex] = new_vertex  # add new vertex,adj_node to graph
-                    self.adj_list[adj_vertex] = new_adj_vertex
-
-                elif self.get_vertex(vertex) and self.get_vertex(adj_vertex) is None:
-                    self.adj_list[adj_vertex] = new_adj_vertex
-                    self.adj_list[vertex].add_edge(adj_vertex)  # append new edge and adj_node to graph vertex
-                elif self.get_vertex(vertex) and self.get_vertex(adj_vertex):
-                    vert = self.get_vertex(vertex)
-                    test_edge = self.Edge(vert, adj_vertex)
-                    if test_edge not in self.adj_list[vertex].edges:
-                        self.adj_list[vertex].edges.append(test_edge)  # add new edge if it DNE
-
+                add_new_edge(vertex, adj_vertex)
         else:
-            self.generate_edges()
+            if self.size <= 0:
+                raise GraphError('bad size')
+            if not (0 < self.connectedness <= 1):  # has to be (0,1]
+                raise GraphError('something is wrong with connectedness, whatever that means')
+
+            edges = self.generate_edges()
+
+            for edge in edges:
+                vertex = edge[0]
+                adj_vertex = edge[1]
+                add_new_edge(vertex, adj_vertex)
 
     def BFS(self, start, target):
         pass
 
     def DFS(self, start, target, path=Path()):
-        pass
+
+        for adj_nodes in start:
+            pass
 
 
 def fake_emails(graph, mark_fake=False):
@@ -236,3 +256,15 @@ if __name__ == '__main__':
     test = Graph(filename='test_construction_simple.txt')
     test.construct_graph()
     print(test)
+
+    mimir = Graph(size=10, connectedness=1)
+    mimir.construct_graph()
+    print(mimir)
+
+    try:
+        err_test = Graph()
+    except GraphError:
+        pass
+
+    connect = Graph(size=20, connectedness=0.3)
+    print(connect)
