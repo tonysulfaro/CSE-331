@@ -313,7 +313,6 @@ class Graph:
         # path.add_vertex(start)
         vert = self.adj_list[start]
         vert.visit()
-        path.add_vertex(start)
         print(path)
         #
         # if start == target:
@@ -335,13 +334,21 @@ class Graph:
         #         return self.DFS(edge.destination, target, path)
 
         for edge in vert.edges:  # for every outgoing edge from u
+
+            if target in path.vertices:
+                return path
+
             v = edge.destination
             if v == target:
                 path.add_vertex(edge.destination)
+                print('found', path)
                 return path
             if v not in path.vertices:  # v is an unvisited vertex
-                path.add_vertex(edge.destination)  # e is the tree edge that discovered v
+                path.add_vertex(start)
+                # path.add_vertex(edge.destination)  # e is the tree edge that discovered v
                 self.DFS(v, target, path)  # recursively explore from v
+        if target not in path.vertices:
+            path.remove_vertex()
 
 
 def fake_emails(graph, mark_fake=False):
@@ -383,7 +390,7 @@ if __name__ == '__main__':
     test = Graph(filename='test_construction_simple.txt')
     test.construct_graph()
     v = test.adj_list[0]
-    print(test.DFS(2, 44))
+    print(test.DFS(2, 50))
     # test.BFS(0, 44)
     print(test)
     # print(fake_emails(test, True))
