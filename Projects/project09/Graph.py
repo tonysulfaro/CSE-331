@@ -314,24 +314,6 @@ class Graph:
         vert = self.adj_list[start]
         vert.visit()
         print(path)
-        #
-        # if start == target:
-        #     return path
-        #
-        # if vert.degree() == 0:
-        #     new_start = path.vertices[-2]
-        #     while not path.is_empty():
-        #         path.remove_vertex()
-        #     return self.DFS(new_start, target, path)
-        #
-        # for edge in vert.edges:
-        #     if edge.destination == target:
-        #         path.add_vertex(edge.destination)
-        #         return path
-        #
-        # for edge in vert.edges:
-        #     if not self.adj_list[edge.destination].visited:
-        #         return self.DFS(edge.destination, target, path)
 
         for edge in vert.edges:  # for every outgoing edge from u
 
@@ -339,6 +321,13 @@ class Graph:
                 return path
 
             v = edge.destination
+            if v == 6:
+                print(v)
+            for edge in vert.edges:
+                if edge.destination == target:
+                    path.add_vertex(start)
+                    path.add_vertex(edge.destination)
+                    return path
             if v == target:
                 path.add_vertex(edge.destination)
                 print('found', path)
@@ -349,6 +338,8 @@ class Graph:
                 self.DFS(v, target, path)  # recursively explore from v
         if target not in path.vertices:
             path.remove_vertex()
+        else:
+            return path
 
 
 def fake_emails(graph, mark_fake=False):
@@ -389,8 +380,7 @@ def fake_emails(graph, mark_fake=False):
 if __name__ == '__main__':
     test = Graph(filename='test_construction_simple.txt')
     test.construct_graph()
-    v = test.adj_list[0]
-    print(test.DFS(2, 50))
+    print(test.DFS(2, 44))
     # test.BFS(0, 44)
     print(test)
     # print(fake_emails(test, True))
