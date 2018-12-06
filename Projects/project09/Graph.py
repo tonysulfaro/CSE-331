@@ -295,12 +295,67 @@ class Graph:
                 add_new_edge(vertex, adj_vertex)
 
     def BFS(self, start, target):
-        forest = {}
-        for u in self.adj_list:
-            if u not in forest:
-                forest[u] = None  # u will be a root of a tree
-                self.BFS(u, forest)
-        return forest
+        """
+        check distances from start node until target is found or not found
+        :param start: ID of vertex to start search at
+        :param target: target ID to stop search and return path at
+        :return: Path - path taken to get from start to target
+        """
+        # path = self.Path()
+        # # path.add_vertex(start)
+        # vert = self.adj_list[start]
+        # vert.visit()
+        # print(path)
+        #
+        # for edge in vert.edges:  # for every outgoing edge from u
+        #
+        #     if target in path.vertices:
+        #         return path
+        #
+        #     v = edge.destination
+        #     if v == 5:
+        #         print(v)
+        #     if v == target:
+        #         path.add_vertex(edge.destination)
+        #         print('found', path)
+        #         return path
+        #     for edge in vert.edges:
+        #         if edge.destination == target:
+        #             path.add_vertex(edge.destination)
+        #             return path
+        #     if v not in path.vertices:  # v is an unvisited vertex
+        #         path.add_vertex(start)
+        #         # path.add_vertex(edge.destination)  # e is the tree edge that discovered v
+        #         self.BFS(v, target)  # recursively explore from v
+        # if target not in path.vertices:
+        #     path.remove_vertex()
+        # return path
+
+        path = self.Path()
+        print(path)
+
+        start_vert = self.get_vertex(start)
+
+        path.add_vertex(start)
+
+        if start_vert.degree() == 0:
+            path.remove_vertex()
+            return
+
+        # if target in path.vertices:
+        #     return path
+
+        for edge in start_vert.edges:
+            if edge.destination == target:
+                path.add_vertex(edge.destination)
+                return path
+        for edge in start_vert.edges:
+            self.BFS(edge.destination, target)
+
+        # if target not in path.vertices:
+        #     path.remove_vertex()
+        # else:
+        #     return path
 
     def DFS(self, start, target, path=Path()):
         """
@@ -321,9 +376,8 @@ class Graph:
                 return path
 
             v = edge.destination
-            if v == 6:
-                print(v)
-            for edge in vert.edges:
+
+            for edge in vert.edges:  # if vertex in adj_edges then add it to path along with self and return
                 if edge.destination == target:
                     path.add_vertex(start)
                     path.add_vertex(edge.destination)
@@ -336,6 +390,7 @@ class Graph:
                 path.add_vertex(start)
                 # path.add_vertex(edge.destination)  # e is the tree edge that discovered v
                 self.DFS(v, target, path)  # recursively explore from v
+
         if target not in path.vertices:
             path.remove_vertex()
         else:
@@ -363,36 +418,60 @@ def fake_emails(graph, mark_fake=False):
         :param emails: emails that are fake
         :return: emails - list of fake emails that can be reached
         """
+        #vert = graph.get_vertex(start)
 
-        pass
+        # for vertex in verticies
+        # if an edge.destination in emails:
+        # remove edge from source to fake email
+
+        # for vertex_id, vert in graph.adj_list.items():
+        #     new_edges = []
+        #     for edge in vert.edges:
+        #         if edge.destination not in emails:
+        #             new_edges.append(edge)
+        #     vert.edges = new_edges
+
+        visited, queue = set(), [start]
+        while queue:
+            vertex = queue.pop(0)
+            if vertex not in visited:
+                visited.add(vertex)
+                #queue.extend(graph[vertex] - visited)
+                vert = graph.get_vertex(vertex)
+                for edge in vert.edges:
+                    if edge.destination != visited:
+                        queue.append(edge.destination)
+        print(visited)
+
+        for vertex_id in visited:
+            vert = graph.get_vertex(vertex_id)
+            new_edges = []
+            for edge in vert.edges:
+                if edge.destination not in emails:
+                    new_edges.append(edge)
+            vert.edges = new_edges
 
     for vertex_id, vertex in graph.adj_list.items():
 
         if mark_fake and vertex.degree() == 0:
             vertex.set_fake()
+        if vertex.degree() == 0:
             fakes.append(vertex_id)
-            print('fake')
-        print(vertex)
 
+    for vertex_id, vertex in graph.adj_list.items():
+        check_fake_emails(vertex_id, fakes)
     return fakes
 
 
 if __name__ == '__main__':
     test = Graph(filename='test_construction_simple.txt')
     test.construct_graph()
-    print(test.DFS(2, 44))
+    # print(test.BFS(1, 9))
     # test.BFS(0, 44)
     print(test)
-    # print(fake_emails(test, True))
+    #print(fake_emails(test, True))
+    print(test)
 
-    mimir = Graph(size=10, connectedness=1)
-    mimir.construct_graph()
-    print(mimir)
-
-    try:
-        err_test = Graph()
-    except GraphError:
-        pass
-
-    connect = Graph(size=20, connectedness=0.3)
-    print(connect)
+    fake = Graph(size=20, connectedness=0.1)
+    fake_emails(fake, True)
+    print(fake)
