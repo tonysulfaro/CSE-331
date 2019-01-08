@@ -1,3 +1,8 @@
+######################################################################
+# PROJECT: Graphs, and all the frustrations that come with them haha
+# Author: Tony Sulfaro
+######################################################################
+
 import random
 
 
@@ -274,7 +279,6 @@ class Graph:
         if self.filename:
             # Construct graph from file
             fp = open(self.filename, 'r', encoding='ascii')
-            count = 0
             for line in fp:
                 line = line.split()  # [vertex, adjacent-vertex]
 
@@ -282,6 +286,7 @@ class Graph:
                 adj_vertex = int(line[1])
                 add_new_edge(vertex, adj_vertex)
         else:
+            # no file provided, use built in function
             if self.size <= 0:
                 raise GraphError('bad size')
             if not 0 < self.connectedness <= 1:  # has to be (0,1]
@@ -289,6 +294,7 @@ class Graph:
 
             edges = self.generate_edges()
 
+            # add edges from generate_edges()
             for edge in edges:
                 vertex = edge[0]
                 adj_vertex = edge[1]
@@ -302,37 +308,25 @@ class Graph:
         :return: Path - path taken to get from start to target
         """
 
-        # visited, queue = set(), [start]
-        # while queue:
-        #     vertex = queue.pop(0)
-        #     if vertex not in visited:
-        #         visited.add(vertex)
-        #         # queue.extend(graph[vertex] - visited)
-        #         vert = self.get_vertex(vertex)
-        #         for edge in vert.edges:
-        #             if edge.destination != visited:
-        #                 queue.append(edge.destination)
-        # print('VISITED BFS PATH:', visited)
-
         def BFS_List(start, target):
 
-            stack = [(start, [start])]
+            stack = [(start, [start])]  # initialize stack to save visited vertices
             while stack:
-                (vertex, path) = stack.pop()
+                (vertex, path) = stack.pop()  # get list element
                 vert = self.get_vertex(vertex)
                 new_edges = []
-                for edge in vert.edges:
+                for edge in vert.edges:  # get new edges for vertex
                     if edge.destination not in path:
                         new_edges.append(edge)
                 vert.edges = new_edges
-                for next in vert.edges:  # graph[vertex] - set(path):
+                for next in vert.edges:
                     if next.destination == target:
                         yield path + [next.destination]
                     else:
                         stack.append((next.destination, path + [next.destination]))
 
-        path = self.Path()
-        path_result = BFS_List(start, target)
+        path = self.Path([])
+        path_result = BFS_List(start, target)  # after getting traversal in list form, convert to Path
         print(path_result)
         for vertex_id in path_result:
             for item in vertex_id:
@@ -365,7 +359,7 @@ class Graph:
                     path.add_vertex(start)
                     path.add_vertex(edge.destination)
                     return path
-            if v == target:
+            if v == target:  # path has been found
                 path.add_vertex(edge.destination)
                 print('found', path)
                 return path
@@ -401,65 +395,61 @@ def fake_emails(graph, mark_fake=False):
         :param emails: emails that are fake
         :return: emails - list of fake emails that can be reached
         """
-        # vert = graph.get_vertex(start)
 
         # for vertex in verticies
         # if an edge.destination in emails:
         # remove edge from source to fake email
 
-        # for vertex_id, vert in graph.adj_list.items():
-        #     new_edges = []
-        #     for edge in vert.edges:
-        #         if edge.destination not in emails:
-        #             new_edges.append(edge)
-        #     vert.edges = new_edges
+        # get a traversal of all vertices that can be reached from start
+        def dfs_traversal(graph, start, visited=None):
+            """
+            return DFS traversal of the graph starting at start
+            :param graph: graph to traverse on
+            :param start: where to start
+            :param visited: set of vertices that have been visited
+            :return: visited - set
+            """
+            if visited is None:
+                visited = set()
+            visited.add(start)
+            vert = graph.get_vertex(start)
+            for edge in vert.edges:  # get edges for vertex
+                if edge.destination not in visited:  # add unique ones to visited
+                    visited.add(edge.destination)
+                    dfs_traversal(graph, edge.destination, visited)  # repeat again
+            return visited
 
-        visited, queue = set(), [start]
-        while queue:
-            vertex = queue.pop(0)
-            if vertex not in visited:
-                visited.add(vertex)
-                # queue.extend(graph[vertex] - visited)
-                vert = graph.get_vertex(vertex)
-                for edge in vert.edges:
-                    if edge.destination != visited:
-                        queue.append(edge.destination)
-        # print(visited)
+        visited = dfs_traversal(graph, start)
 
-        for vertex_id in visited:
+        # remove edges from vertices that are fake
+        for vertex_id in visited:  # remove edges that are to fake vertices
             vert = graph.get_vertex(vertex_id)
             new_edges = []
-            for edge in vert.edges:
+            for edge in vert.edges:  # add in only the realist of edges, no fakes
                 if edge.destination not in emails:
                     new_edges.append(edge)
             vert.edges = new_edges
 
-    for vertex_id, vertex in graph.adj_list.items():
+    for vertex_id, vertex in graph.adj_list.items():  # iterate through vertices
 
-        if mark_fake and vertex.degree() == 0:
-            # vertex.set_fake()
-            pass
-        if vertex.degree() == 0:
+        if vertex.degree() == 0:  # found fake vertex
             fakes.append(vertex_id)
 
-    for vertex_id, vertex in graph.adj_list.items():
+    for vertex_id, vertex in graph.adj_list.items():  # remove fake edges for each vertex
         vertex.visit()
-        check_fake_emails(vertex_id, fakes)
+        check_fake_emails(vertex_id, fakes)  # remove edges for vertex
         if vertex.degree() == 0 and mark_fake and vertex_id in fakes:
             vertex.set_fake()
     return fakes
 
 
 if __name__ == '__main__':
-    # Graph(size=20, connectedness=0.3)
+    # test = Graph(size=60, connectedness=0.3)
     test = Graph(20, connectedness=0.1)
+    test = Graph(filename='test_construction_simple.txt')
     test.construct_graph()
     # print(test.DFS(2, 44))
-    print('shortest path:', test.BFS(0, 16))
+    # print('shortest path:', test.BFS(0, 16))
     print(test)
     print(fake_emails(test, True))
     print(test)
-
-    fake = Graph(size=20, connectedness=0.1)
-    fake_emails(fake, True)
-    print(fake)

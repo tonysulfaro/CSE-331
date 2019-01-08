@@ -5,3 +5,6 @@ Projects/.DS_Store
 .pyc
 *.pyc
 .idea/workspace.xml
+.idea/misc.xml
+.idea/encodings.xml
+.idea/CSE-331.iml
